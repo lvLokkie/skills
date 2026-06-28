@@ -1,0 +1,14 @@
+{
+  "name": "personal-skills-marketplace",
+  "owner": {
+    "name": "Ivan Ryazanov"
+  },
+  "description": "Personal Claude Code skills marketplace.",
+  "plugins": [
+    {
+      "name": "personal-skills",
+      "source": "./plugins/personal-skills",
+      "description": "My personal skills."
+    }
+  ]
+}
