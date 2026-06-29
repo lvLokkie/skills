@@ -2,14 +2,14 @@
 
 A minimal personal Claude Code plugin marketplace for installing Ivan's own skills on any machine.
 
-The `hello-world` skill is only a placeholder smoke test; delete it when real skills exist.
+The `created-skill-audit` skill is the first real skill. The `hello-world` skill is only a placeholder smoke test; delete it when no longer needed.
 
 ## Install
 
 ```text
-/plugin marketplace add lvLokkie/personal-claude-skills-marketplace
+/plugin marketplace add lvLokkie/skills
 /plugin install personal-skills@personal-skills-marketplace
-/personal-skills:hello-world
+/personal-skills:created-skill-audit
 ```
 
 ## Add a new skill
