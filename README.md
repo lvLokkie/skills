@@ -30,7 +30,7 @@ For private clones, installation needs a git credential helper or `GITHUB_TOKEN`
 - **No-op pruning.** Keep only text that changes observable behavior.
 - **Dependency over copying.** Use external skill repos as dependencies or reference; local skills should be thin adapters for routing, config, and deltas — not rewritten forks of upstream procedures.
 
-See [docs/invocation.md](./docs/invocation.md) and [docs/mattpocock-dependency-candidates.md](./docs/mattpocock-dependency-candidates.md).
+See [docs/invocation.md](./docs/invocation.md), [docs/dependencies.md](./docs/dependencies.md), and [docs/mattpocock-dependency-candidates.md](./docs/mattpocock-dependency-candidates.md).
 
 ## Promoted skills
 
@@ -53,6 +53,7 @@ None yet. Add user-invoked skills only when the human should intentionally start
 | `plugins/personal-skills/skills/<name>/SKILL.md` | Source of truth for shipped Claude skills. |
 | `plugins/personal-skills/skills/README.md` | Bucket catalog grouped by invocation class. |
 | `docs/invocation.md` | Invocation taxonomy and dependency style. |
+| `docs/dependencies.md` | General dependency policy: hard/soft/reference/tool/plugin deps, fallbacks, and no-vendoring rules. |
 | `docs/mattpocock-dependency-candidates.md` | Reference analysis and shortlist of upstream skills to depend on or adapt. |
 | `AGENTS.md` | Working rules for agents editing this repo. |
 
@@ -78,6 +79,7 @@ python scripts/validate.py
 ## Dependency policy
 
 - Do not vendor third-party skill repos by default.
+- Classify dependencies as hard, soft, reference, tool, or plugin dependencies in [docs/dependencies.md](./docs/dependencies.md).
 - For overlaps, prefer upstream dependency/reference plus a thin local adapter; do not restate the full upstream skill locally.
-- If the target agent cannot consume the upstream skill directly, document the compatibility gap before forking/adapting text.
+- If the target agent cannot consume the upstream skill directly, document the compatibility gap and maintenance owner before forking/adapting text.
 - Do not ship personal, in-progress, or deprecated upstream skills unless there is a fresh local audit.

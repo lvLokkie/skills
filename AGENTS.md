@@ -10,7 +10,7 @@ Personal, vendor-neutral skills marketplace. Single source of truth for Ivan's p
 | `plugins/personal-skills/skills/README.md` | Skill bucket catalog grouped by invocation class | ✅ source |
 | `.claude-plugin/marketplace.json` | Marketplace entry pointing at plugin packages | ✅ thin |
 | `plugins/personal-skills/.claude-plugin/plugin.json` | Plugin manifest and promoted skill list | ✅ thin |
-| `docs/` | Invocation model, dependency rationale, ADRs/reference notes | ✅ source |
+| `docs/` | Invocation model, dependency policy, dependency rationale, ADRs/reference notes | ✅ source |
 | `AGENTS.md` | Canonical agent instructions for this repo | ✅ source |
 | `CLAUDE.md`, `GEMINI.md`, `.cursor/*` | Generated compatibility files if present | ❌ never by hand |
 
@@ -41,11 +41,12 @@ Keep README, bucket README, and plugin manifest in sync. See `docs/invocation.md
 
 ## 5. External tools and dependencies
 
-- Prefer explicit marketplace/plugin dependencies over vendoring another plugin or copying its skill bodies.
-- For overlapping skills, keep only a thin local adapter: routing, configuration, Ivan/Hermes deltas, and compatibility notes.
-- If a system CLI cannot be bundled, document the prerequisite and preflight check in the skill.
+- Follow `docs/dependencies.md` for dependency classification: hard, soft, reference, tool, or plugin.
+- Prefer upstream dependency/reference plus a thin local adapter over vendoring another plugin or copying its skill bodies.
+- For overlapping skills, keep only local routing, configuration, Ivan/Hermes deltas, and compatibility notes.
+- If a system CLI, MCP server, API, or credential cannot be bundled, document the prerequisite, preflight, fallback, and stop condition in the owning skill.
 - Do not commit secrets: credentials, tokens, local auth files, or `*.local.*`.
-- Keep dependency rationale in `docs/mattpocock-dependency-candidates.md` or an ADR.
+- Keep general dependency policy in `docs/dependencies.md`; keep source-specific rationale in a case-study doc such as `docs/mattpocock-dependency-candidates.md` or an ADR.
 
 ## 6. Versioning and releases
 

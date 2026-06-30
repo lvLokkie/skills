@@ -2,9 +2,11 @@
 
 Reference repo: <https://github.com/mattpocock/skills> (inspected at `448d0ade`).
 
+This is a source-specific case study. The general dependency rules live in [`dependencies.md`](./dependencies.md).
+
 ## What to reuse without copying
 
-This document is a dependency/adaptation map, not a copying backlog. The default is **upstream as dependency/reference, local repo as thin integration layer**.
+This document is a dependency/adaptation map, not a copying backlog. The default follows [`dependencies.md`](./dependencies.md): **upstream as dependency/reference, local repo as thin integration layer**.
 
 Local text is allowed only for:
 
@@ -59,4 +61,4 @@ Do not port full upstream procedures into this repo just because they overlap wi
 2. For overlaps, prefer **direct upstream dependency/reference + local adapter**, not a forked local copy.
 3. Local wrappers may add routing, config, and deltas, but must not restate the full upstream procedure.
 4. Only fork/adapt text when the target agent cannot consume the upstream skill and the workflow is important enough to own maintenance.
-5. If direct marketplace dependencies are added later, pin them semantically in `plugin.json dependencies` and keep this file as the rationale.
+5. If direct marketplace dependencies are added later, first pass the direct-plugin-dependency gate in [`dependencies.md`](./dependencies.md), pin them semantically in `plugin.json dependencies`, and keep this file as the Matt-specific rationale.
