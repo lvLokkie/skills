@@ -33,6 +33,8 @@ Use this table shape for any non-trivial dependency decision:
 |---|---|---|---|---|---|---|
 | `skill-audit` | `mattpocock/skills` | `writing-great-skills` | reference / soft | Mirrors upstream skill-quality vocabulary, then adds skill/category/dependency CRUD, local packaging, dependency, import-strategy, industrial-security, and Ivan/Hermes publish gates. | Use local audit gate for local skill/category changes and external skill candidates; inspect only the candidate/dependency context needed to decide install vs adapter vs local build. | active |
 | `report-writing` | Hermes local skill library | `evidence-first-research-spikes`, `clear-ru-en-writing` | reference / soft | Evidence, confidence, source-ledger, and plain-language report conventions. | Use local report contract when those runtime skills are unavailable. | active |
+| `marketing/lidfly-mcp` | `lidfly.ru` | LidFly MCP v3 (`https://lidfly.ru/mcp/v3`) | tool / soft | Provides advertising-platform access for Yandex Direct/Metrika, VK Ads, Avito Ads, LidFly landing/report tools, and Workspace memory. | If MCP is unavailable, produce offline plans only and do not claim live campaign state or side effects. | active |
+| `marketing/ad-campaign-operations` | `territory-accounting-landing` | `docs/yandex-direct.md` | reference / soft | Project campaign structure, Yandex Direct/Metrika IDs, weekly optimization checklist, and Avito feed context. | Treat as offline source context only; require MCP/API read-back before claiming live state or applied changes. | active |
 
 Rules:
 

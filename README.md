@@ -11,6 +11,7 @@ Claude Code marketplace install:
 ```text
 /plugin marketplace add lvLokkie/skills
 /plugin install personal-skills@personal-skills-marketplace
+/plugin install marketing@personal-skills-marketplace
 ```
 
 Run promoted skills:
@@ -18,6 +19,8 @@ Run promoted skills:
 ```text
 /personal-skills:skill-audit
 /personal-skills:report-writing
+/marketing:lidfly-mcp
+/marketing:ad-campaign-operations
 ```
 
 For private clones, installation needs a git credential helper or `GITHUB_TOKEN` available to the installing machine.
@@ -33,14 +36,25 @@ For private clones, installation needs a git credential helper or `GITHUB_TOKEN`
 
 See [docs/invocation.md](./docs/invocation.md), [docs/dependencies.md](./docs/dependencies.md), and [docs/mattpocock-dependency-candidates.md](./docs/mattpocock-dependency-candidates.md).
 
-## Promoted skills
+## Promoted categories and skills
 
-### Model-invoked
+### `personal-skills`
+
+#### Model-invoked
 
 | Skill | Purpose |
 |---|---|
 | [skill-audit](./plugins/personal-skills/skills/skill-audit/SKILL.md) | Audit local skill/package changes and external skill candidates against `writing-great-skills`, Ivan packaging gates, and industrial security checks before publishing or importing. |
 | [report-writing](./plugins/personal-skills/skills/report-writing/SKILL.md) | Write evidence-backed reports, briefs, and decision memos with sources, confidence labels, conclusions, and next actions. |
+
+### `marketing`
+
+#### Model-invoked
+
+| Skill | Purpose |
+|---|---|
+| [lidfly-mcp](./plugins/marketing/skills/lidfly-mcp/SKILL.md) | Use LidFly MCP safely for advertising-platform access, setup checks, tool-scope selection, and read/write guardrails. |
+| [ad-campaign-operations](./plugins/marketing/skills/ad-campaign-operations/SKILL.md) | Operate and optimize advertising campaigns using source docs, campaign structure, metrics, experiments, and weekly action reports. |
 
 ### User-invoked
 

@@ -1,0 +1,12 @@
+{
+  "name": "marketing",
+  "description": "Marketing and advertising operations skills for campaign setup, audit, reporting, and MCP-assisted optimization.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Ivan Ryazanov"
+  },
+  "skills": [
+    "./skills/lidfly-mcp",
+    "./skills/ad-campaign-operations"
+  ]
+}

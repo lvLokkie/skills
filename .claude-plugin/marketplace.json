@@ -9,6 +9,11 @@
       "name": "personal-skills",
       "source": "./plugins/personal-skills",
       "description": "Ivan's promoted personal agent skills."
+    },
+    {
+      "name": "marketing",
+      "source": "./plugins/marketing",
+      "description": "Marketing and advertising operations skills for campaign setup, audit, reporting, and MCP-assisted optimization."
     }
   ]
 }
