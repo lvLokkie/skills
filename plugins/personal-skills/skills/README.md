@@ -6,7 +6,8 @@ Promoted skills shipped by the `personal-skills` plugin. Keep this list in sync 
 
 Model- or user-reachable. Descriptions use trigger phrasing so an agent can load the skill autonomously.
 
-- **[created-skill-audit](./created-skill-audit/SKILL.md)** — Audit agent-authored or revised skills for behavioral effect, context load, no-op prose, duplicated meaning, stale sediment, and publish readiness.
+- **[skill-audit](./skill-audit/SKILL.md)** — Audit local skill/package changes and external skill candidates against `writing-great-skills`, Ivan packaging gates, and industrial security checks before publishing or importing.
+- **[report-writing](./report-writing/SKILL.md)** — Write evidence-backed reports, briefs, and decision memos with sources, confidence labels, conclusions, and next actions.
 
 ## User-invoked
 

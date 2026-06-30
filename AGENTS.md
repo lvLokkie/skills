@@ -37,7 +37,9 @@ Keep README, bucket README, and plugin manifest in sync. See `docs/invocation.md
 - Keep `SKILL.md` focused on the execution path; put heavy references in sibling files.
 - Every step needs a checkable completion criterion.
 - Delete no-op prose. If a sentence does not change behavior, output, verification, or refusal boundary, remove it.
-- Use `created-skill-audit` before publishing agent-written or externally adapted skills.
+- Use `skill-audit` on every local skill, skill README, plugin manifest, dependency policy, or skill-packaging change.
+- Use `skill-audit` before installing, copying, forking, importing, or adapting third-party skills.
+- Apply the skill/dependency CRUD gates in `skill-audit` for create, read/audit, update, delete, import/adapt, and plugin dependency promotion.
 
 ## 5. External tools and dependencies
 
@@ -45,7 +47,8 @@ Keep README, bucket README, and plugin manifest in sync. See `docs/invocation.md
 - Prefer upstream dependency/reference plus a thin local adapter over vendoring another plugin or copying its skill bodies.
 - For overlapping skills, keep only local routing, configuration, Ivan/Hermes deltas, and compatibility notes.
 - If a system CLI, MCP server, API, or credential cannot be bundled, document the prerequisite, preflight, fallback, and stop condition in the owning skill.
-- Do not commit secrets: credentials, tokens, local auth files, or `*.local.*`.
+- Run the industrial security gate from `skill-audit` on changed or candidate files: prefer `gitleaks`/`trufflehog` when available, otherwise run a fallback secret scan and inspect executable payloads, prompt-injection bait, hidden network/install side effects, and local-only credentials.
+- Do not commit secrets: credentials, tokens, local auth files, browser/session profiles, or `*.local.*`. Redact real values as `[REDACTED]` in reports.
 - Keep general dependency policy in `docs/dependencies.md`; keep source-specific rationale in a case-study doc such as `docs/mattpocock-dependency-candidates.md` or an ADR.
 
 ## 6. Versioning and releases
@@ -62,3 +65,6 @@ Keep README, bucket README, and plugin manifest in sync. See `docs/invocation.md
 - [ ] No secrets or local-only credentials introduced
 - [ ] Version bumped for behavior changes
 - [ ] `python scripts/validate.py` passes
+- [ ] `git diff --check` passes
+- [ ] Plugin JSON parses and `claude plugin validate .` / `claude plugin validate plugins/personal-skills` pass when Claude CLI is available
+- [ ] `skill-audit` security gate was run on changed/candidate files

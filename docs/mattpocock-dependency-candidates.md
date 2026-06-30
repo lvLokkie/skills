@@ -33,13 +33,13 @@ Do not port full upstream procedures into this repo just because they overlap wi
 |---|---|---|---|
 | `~/.hermes/skills/software-development/improve-codebase-architecture` | `skills/engineering/improve-codebase-architecture` | Directly inherited/adapted in active Hermes skills | Keep as a local Hermes skill; do not duplicate into this marketplace unless packaging Hermes skills here becomes a goal. |
 | `~/.hermes/skills/software-development/domain-grill-with-docs` | `skills/engineering/grill-with-docs` + domain modeling ideas | Adapted for Ivan/Hermes repo conventions | Keep local adaptation; dependency would be conceptual, not a direct install. |
-| `plugins/personal-skills/skills/created-skill-audit` | Overlaps with `writing-great-skills` pruning/no-op discipline | Local derivative idea, not a copied upstream skill | Keep as our own marketplace skill; use upstream as reference for vocabulary and invocation model. |
+| `plugins/personal-skills/skills/skill-audit` | Overlaps with `writing-great-skills` pruning/no-op discipline | Local derivative idea, not a copied upstream skill | Keep as our own marketplace skill; use upstream as reference for vocabulary and invocation model. |
 
 ## Potential dependencies from `mattpocock/skills`
 
 | Priority | Upstream skill(s) | Dependency mode | Why we want it | Local handling |
 |---|---|---|---|---|
-| P0 | `writing-great-skills` | Dependency/reference first; local thin audit wrapper only | Best framework for skill quality: predictability, context load, progressive disclosure, no-op pruning, leading words. | Keep `created-skill-audit` as a local wrapper for Ivan publish gates; do not copy upstream reference content. |
+| P0 | `writing-great-skills` | Dependency/reference first; local thin audit wrapper only | Best framework for skill quality: predictability, context load, progressive disclosure, no-op pruning, leading words. | Keep `skill-audit` as a local wrapper for Ivan publish/import gates; do not copy upstream reference content. |
 | P0 | `grilling`, `grill-me`, `grill-with-docs` | Dependency/reference plus local router/delta notes | One-question-at-a-time alignment loop; recommended answer with each question; docs/code lookup before asking. | Local skills should point to the upstream flow and add only Ivan docs taxonomy/delivery deltas. |
 | P0 | `tdd` | Dependency/reference; local project-specific test commands only | Red-green-refactor, public-interface tests, vertical slices, don't mock internals by default. | Do not reimplement the full TDD skill; add local setup/validation deltas where needed. |
 | P0 | `diagnosing-bugs` | Dependency/reference; local deterministic loop hooks only | Deterministic reproduce → minimise → hypothesise → instrument → fix → regression-test loop. | Do not copy the loop; add local Hermes debugging entry points and cleanup conventions. |

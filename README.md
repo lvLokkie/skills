@@ -13,10 +13,11 @@ Claude Code marketplace install:
 /plugin install personal-skills@personal-skills-marketplace
 ```
 
-Run the promoted skill:
+Run promoted skills:
 
 ```text
-/personal-skills:created-skill-audit
+/personal-skills:skill-audit
+/personal-skills:report-writing
 ```
 
 For private clones, installation needs a git credential helper or `GITHUB_TOKEN` available to the installing machine.
@@ -38,11 +39,12 @@ See [docs/invocation.md](./docs/invocation.md), [docs/dependencies.md](./docs/de
 
 | Skill | Purpose |
 |---|---|
-| [created-skill-audit](./plugins/personal-skills/skills/created-skill-audit/SKILL.md) | Audit agent-authored or revised skills for behavioral effect, context load, no-op prose, duplicated meaning, stale sediment, and publish readiness. |
+| [skill-audit](./plugins/personal-skills/skills/skill-audit/SKILL.md) | Audit local skill/package changes and external skill candidates against `writing-great-skills`, Ivan packaging gates, and industrial security checks before publishing or importing. |
+| [report-writing](./plugins/personal-skills/skills/report-writing/SKILL.md) | Write evidence-backed reports, briefs, and decision memos with sources, confidence labels, conclusions, and next actions. |
 
 ### User-invoked
 
-None yet. Add user-invoked skills only when the human should intentionally start the flow and the skill should not spend model context by default.
+None yet. Prefer direct upstream dependencies for generic command skills like `handoff` unless this marketplace needs a local platform adapter.
 
 ## Repository layout
 
