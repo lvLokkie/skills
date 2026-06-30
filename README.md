@@ -21,6 +21,8 @@ Run promoted skills:
 /personal-skills:report-writing
 /marketing:lidfly-mcp
 /marketing:ad-campaign-operations
+/marketing:avito-ads-feed
+/marketing:lead-routing-tracking
 ```
 
 For private clones, installation needs a git credential helper or `GITHUB_TOKEN` available to the installing machine.
@@ -55,6 +57,8 @@ See [docs/invocation.md](./docs/invocation.md), [docs/dependencies.md](./docs/de
 |---|---|
 | [lidfly-mcp](./plugins/marketing/skills/lidfly-mcp/SKILL.md) | Use LidFly MCP safely for advertising-platform access, setup checks, tool-scope selection, and read/write guardrails. |
 | [ad-campaign-operations](./plugins/marketing/skills/ad-campaign-operations/SKILL.md) | Operate and optimize advertising campaigns using source docs, campaign structure, metrics, experiments, and weekly action reports. |
+| [avito-ads-feed](./plugins/marketing/skills/avito-ads-feed/SKILL.md) | Generate, audit, and smoke-test Avito service ad feeds, branded cards, listing copy, category mappings, and feed coverage. |
+| [lead-routing-tracking](./plugins/marketing/skills/lead-routing-tracking/SKILL.md) | Audit and smoke-test lead forms, UTM/referrer attribution, n8n routing, Telegram/MAX delivery, and analytics goals. |
 
 ### User-invoked
 

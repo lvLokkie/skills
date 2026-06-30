@@ -13,7 +13,7 @@
     {
       "name": "marketing",
       "source": "./plugins/marketing",
-      "description": "Marketing and advertising operations skills for campaign setup, audit, reporting, and MCP-assisted optimization."
+      "description": "Marketing and advertising operations skills for campaign setup, audit, reporting, lead routing, feed checks, and MCP-assisted optimization."
     }
   ]
 }
