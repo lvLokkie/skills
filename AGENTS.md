@@ -1,70 +1,63 @@
 # AGENTS.md — Working Rules
 
-Personal, vendor-neutral skills marketplace. Single source of truth for skills,
-MCP servers, and agent instructions — synced across devices via git, installed
-through the Claude Code plugin marketplace (and portable to other agents).
+Personal, vendor-neutral skills marketplace. Single source of truth for Ivan's promoted agent skills, packaged first for Claude Code and kept portable to Hermes, Codex, and future agents.
 
 ## 1. Layout — where things live
 
 | Path | Role | Edit? |
 |---|---|---|
-| skills/<name>/SKILL.md | Single source for every skill | ✅ source |
-| .mcp.json | MCP servers (open standard) | ✅ source |
-| bin/ | Bundled executables (added to PATH while enabled) | ✅ source |
-| hooks/hooks.json | Lifecycle hooks | ✅ source |
-| AGENTS.md | Canonical agent instructions (this file) | ✅ source |
-| dotfiles/.claude/settings.json | Synced harness settings | ✅ source |
-| .claude-plugin/, plugins/ | Claude packaging (thin manifests) | ✅ thin |
-| .codex-plugin/ | Codex packaging (thin, optional) | ✅ thin |
-| CLAUDE.md, GEMINI.md, .cursor/* | Generated from AGENTS.md | ❌ never by hand |
+| `plugins/personal-skills/skills/<name>/SKILL.md` | Source for shipped Claude skills | ✅ source |
+| `plugins/personal-skills/skills/README.md` | Skill bucket catalog grouped by invocation class | ✅ source |
+| `.claude-plugin/marketplace.json` | Marketplace entry pointing at plugin packages | ✅ thin |
+| `plugins/personal-skills/.claude-plugin/plugin.json` | Plugin manifest and promoted skill list | ✅ thin |
+| `docs/` | Invocation model, dependency rationale, ADRs/reference notes | ✅ source |
+| `AGENTS.md` | Canonical agent instructions for this repo | ✅ source |
+| `CLAUDE.md`, `GEMINI.md`, `.cursor/*` | Generated compatibility files if present | ❌ never by hand |
 
-## 2. Vendor-neutrality (golden rules)
+## 2. Vendor-neutrality
 
-1. skills/ is the ONLY source. Per-tool manifests are thin/generated, never authored content.
-2. Write skill bodies in terms of actions ("search the repo", "run the tests"), not Claude-specific tool names.
-3. Canonical instructions live in AGENTS.md. CLAUDE.md / GEMINI.md / cursor rules are regenerated, not edited.
-4. External capability only via open standards: MCP in .mcp.json; document CLI prerequisites, never assume a proprietary connector.
+1. Skill bodies describe actions and checks, not proprietary tool names.
+2. Per-agent manifests are packaging only; behavior belongs in `SKILL.md` or docs.
+3. External capability is declared via open standards or documented prerequisites; never hide dependency logic in prose.
+4. Third-party skill repos are dependencies/reference material, not folders to mirror wholesale or prose to rewrite locally.
 
-## 3. Secrets & sync policy
+## 3. Invocation taxonomy
 
-- NEVER commit: ~/.claude.json, .credentials.json, *.local.json, any token / API key.
-- Secrets are referenced, not embedded — via env, apiKeyHelper, or ${user_config.*}.
-- Committed: settings.json (declarative), AGENTS.md, skills/, .mcp.json (no secrets), bin/, hooks/.
-- New device = git clone + fresh claude login. Credentials are per-device, never copied.
+Every promoted skill is either:
+
+- **Model-invoked** — no `disable-model-invocation`; description is model-facing and includes distinct trigger branches.
+- **User-invoked** — `disable-model-invocation: true`; description is a human-facing one-line summary.
+
+Keep README, bucket README, and plugin manifest in sync. See `docs/invocation.md`.
 
 ## 4. Skill authoring
 
-- One skill = one folder skills/<kebab-name>/SKILL.md.
-- Frontmatter description is required, action-oriented, and states when to use the skill.
-- Keep SKILL.md focused; put heavy reference material in sibling files (progressive disclosure).
-- If a skill needs a CLI or MCP tool, add a preflight check + setup hint inside the skill — no silent assumption.
+- One skill = one folder under `plugins/personal-skills/skills/<kebab-name>/`.
+- Frontmatter must include `name` and `description`.
+- Keep `SKILL.md` focused on the execution path; put heavy references in sibling files.
+- Every step needs a checkable completion criterion.
+- Delete no-op prose. If a sentence does not change behavior, output, verification, or refusal boundary, remove it.
+- Use `created-skill-audit` before publishing agent-written or externally adapted skills.
 
-## 5. External tools and dependencies (MCP / CLI / plugins)
+## 5. External tools and dependencies
 
-- Prefer bundling: MCP in .mcp.json, scripts/binaries in bin/, all paths via ${CLAUDE_PLUGIN_ROOT}.
-- A system CLI you can't bundle (`glab`, `pup`, `jq`) → document the prerequisite in `SKILL.md` with a runtime/preflight check and setup hint. This includes Claude CLIs.
-- Plugin-to-plugin dependencies go through `plugin.json dependencies` (semver). This field is for plugins, not CLIs.
-- Do not vendor or nest third-party plugins inside this plugin. Keep external plugins as declared dependencies so ownership, updates, and licenses stay clear.
-- MCP capabilities are declared through `.mcp.json`, not hidden inside skill prose or proprietary connector assumptions.
-- Third-party skills, snippets, or workflow ideas may be adapted into `skills/<name>/SKILL.md` only when the license permits; keep attribution where required.
-- Per-tool manifests stay thin/generated and must not become the source of dependency logic.
+- Prefer explicit marketplace/plugin dependencies over vendoring another plugin or copying its skill bodies.
+- For overlapping skills, keep only a thin local adapter: routing, configuration, Ivan/Hermes deltas, and compatibility notes.
+- If a system CLI cannot be bundled, document the prerequisite and preflight check in the skill.
+- Do not commit secrets: credentials, tokens, local auth files, or `*.local.*`.
+- Keep dependency rationale in `docs/mattpocock-dependency-candidates.md` or an ADR.
 
-## 6. Versioning & releases
+## 6. Versioning and releases
 
-- Bump plugin.json version on any behavior change — users only receive updates when it changes.
-- Keep the marketplace.json plugin entry in sync with the plugin manifest.
+- Bump `plugins/personal-skills/.claude-plugin/plugin.json` version on behavior changes.
+- Keep `.claude-plugin/marketplace.json` description aligned with the plugin manifest.
+- Do not commit or push without explicit user instruction.
 
-## 7. Git workflow
+## 7. Definition of done
 
-- Never commit or push without an explicit ask. Branch per change: feat/, fix/, docs/, ref/.
-- Gate outward actions: confirm before gh repo create, push, or making the repo public.
-- After editing skills/ or AGENTS.md, regenerate derived files (`CLAUDE.md`, cursor rules) in the same commit.
-- Conventional commit messages.
-
-## 8. Definition of done (any repo change)
-
-- [ ] Edited the single source (`skills/` or `AGENTS.md`), not a generated file
-- [ ] Derived files regenerated, or confirmed not present/applicable
-- [ ] No secrets introduced
-- [ ] version bumped if behavior changed
-- [ ] Validated locally: claude --plugin-dir . and/or claude plugin validate
+- [ ] Edited source files, not generated files
+- [ ] README, bucket README, and plugin manifest agree on promoted skills
+- [ ] No placeholder skills are shipped
+- [ ] No secrets or local-only credentials introduced
+- [ ] Version bumped for behavior changes
+- [ ] `python scripts/validate.py` passes

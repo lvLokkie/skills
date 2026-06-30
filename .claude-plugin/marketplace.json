@@ -3,12 +3,12 @@
   "owner": {
     "name": "Ivan Ryazanov"
   },
-  "description": "Personal Claude Code skills marketplace.",
+  "description": "Ivan's universal agent skills marketplace: vendor-neutral personal skills packaged for Claude Code and portable to Hermes/Codex.",
   "plugins": [
     {
       "name": "personal-skills",
       "source": "./plugins/personal-skills",
-      "description": "My personal skills."
+      "description": "Ivan's promoted personal agent skills."
     }
   ]
 }

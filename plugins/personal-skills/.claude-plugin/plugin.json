@@ -1,8 +1,11 @@
 {
   "name": "personal-skills",
-  "description": "My personal skills.",
-  "version": "0.1.1",
+  "description": "Ivan's promoted personal agent skills.",
+  "version": "0.2.0",
   "author": {
     "name": "Ivan Ryazanov"
-  }
+  },
+  "skills": [
+    "./skills/created-skill-audit"
+  ]
 }
