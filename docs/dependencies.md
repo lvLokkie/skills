@@ -31,7 +31,7 @@ Use this table shape for any non-trivial dependency decision:
 
 | Local adapter | Upstream repo | Upstream skill/plugin | Type | Why | Fallback | Status |
 |---|---|---|---|---|---|---|
-| `skill-audit` | `mattpocock/skills` | `writing-great-skills` | reference / soft | Mirrors upstream skill-quality vocabulary, then adds skill/dependency CRUD, local packaging, dependency, import-strategy, industrial-security, and Ivan/Hermes publish gates. | Use local audit gate for local skill changes and external skill candidates; inspect only the candidate/dependency context needed to decide install vs adapter vs local build. | active |
+| `skill-audit` | `mattpocock/skills` | `writing-great-skills` | reference / soft | Mirrors upstream skill-quality vocabulary, then adds skill/category/dependency CRUD, local packaging, dependency, import-strategy, industrial-security, and Ivan/Hermes publish gates. | Use local audit gate for local skill/category changes and external skill candidates; inspect only the candidate/dependency context needed to decide install vs adapter vs local build. | active |
 | `report-writing` | Hermes local skill library | `evidence-first-research-spikes`, `clear-ru-en-writing` | reference / soft | Evidence, confidence, source-ledger, and plain-language report conventions. | Use local report contract when those runtime skills are unavailable. | active |
 
 Rules:

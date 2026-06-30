@@ -1,11 +1,11 @@
 ---
 name: skill-audit
-description: "Audit local skill changes and external skill candidates. Use on every change to this marketplace's skills, skill READMEs, plugin manifest, or skill dependency policy; also use before installing, copying, forking, importing, or adapting a third-party skill to decide whether to depend on it, install it directly, write a local adapter, or build our own. Mirrors writing-great-skills rules and adds skill/dependency CRUD, Ivan/local packaging, and industrial security gates."
+description: "Audit local skill changes and external skill candidates. Use on every change to this marketplace's skills, skill READMEs, skill category/plugin manifests, marketplace manifest, or skill dependency policy; also use before installing, copying, forking, importing, or adapting a third-party skill to decide whether to depend on it, install it directly, write a local adapter, or build our own. Mirrors writing-great-skills rules and adds skill/category/dependency CRUD, Ivan/local packaging, and industrial security gates."
 ---
 
 # Skill audit
 
-Audit local skill changes before they ship, and audit external skill candidates before they are installed, copied, forked, or adapted. The standard is **predictability** plus **safe packaging**: the skill should make the agent take the intended process reliably, without duplicate prose, stale sediment, no-op instructions, broken packaging, unnecessary local forks, leaked secrets, or unsafe executable payloads.
+Audit local skill and category changes before they ship, and audit external skill candidates before they are installed, copied, forked, or adapted. The standard is **predictability** plus **safe packaging**: the skill/category should make the agent take the intended process reliably, without duplicate prose, stale sediment, no-op instructions, broken packaging, unnecessary local forks, leaked secrets, or unsafe executable payloads.
 
 This is a model-invoked publish and import gate. It should fire for every local skill change, and for every serious third-party skill candidate before we decide to bring it into this marketplace.
 
@@ -13,10 +13,11 @@ This is a model-invoked publish and import gate. It should fire for every local 
 
 Audit local changes by default when they touch:
 
-- `plugins/personal-skills/skills/**/SKILL.md` and sibling skill files;
-- `plugins/personal-skills/skills/README.md`;
-- `plugins/personal-skills/.claude-plugin/plugin.json`;
-- top-level README entries that list promoted skills;
+- `plugins/*/skills/**/SKILL.md` and sibling skill files;
+- `plugins/*/skills/README.md`;
+- `plugins/*/.claude-plugin/plugin.json`;
+- `.claude-plugin/marketplace.json`;
+- top-level README entries that list promoted skills or categories;
 - `docs/invocation.md`, `docs/dependencies.md`, and source-specific dependency notes when they change skill behavior.
 
 Audit external candidates when Ivan asks whether a third-party skill, plugin, repo, or workflow is worth installing, copying, forking, or adapting.
@@ -27,8 +28,8 @@ If copying from upstream becomes necessary, record why direct dependency/referen
 
 ## Audit loop
 
-1. **Inventory the subject.** For local changes, list changed skill files, invocation class, trigger branches, outputs, tools, checks, dependencies, package indexes, and CRUD operation type. For external candidates, list the upstream skill, package source, license/owner, dependencies, claimed behavior, and install path.
-2. **Apply the CRUD gate.** Use the skill/dependency CRUD rules below so create, read/audit, update, delete, import, and dependency changes each get the right checks.
+1. **Inventory the subject.** For local changes, list changed skill files, skill category/plugin, invocation class, trigger branches, outputs, tools, checks, dependencies, package indexes, and CRUD operation type. For external candidates, list the upstream skill, package source, license/owner, dependencies, claimed behavior, and install path.
+2. **Apply the CRUD gate.** Use the skill/category/dependency CRUD rules below so create, read/audit, update, delete, import, category, and dependency changes each get the right checks.
 3. **Apply the upstream quality lens.** Check the subject against `writing-great-skills` concepts: description, context load, cognitive load, branch, leading word, information hierarchy, progressive disclosure, completion criterion, duplication, relevance, sediment, sprawl, and no-op.
 4. **Check invocation.** For model-invoked skills, the description must front-load the leading word and include only genuinely distinct trigger branches. For user-invoked skills, `disable-model-invocation: true` must be present and the description must be a human-facing one-line summary.
 5. **Check local value.** Keep or create a local skill only if it adds Ivan/Hermes routing, packaging, verification, dependency handling, or workflow behavior that a direct upstream dependency/reference does not provide.
@@ -67,6 +68,18 @@ Classify each change as one or more CRUD operations, then apply the matching gat
 | **Update skill** | Preserve one source of truth; patch the smallest local behavior delta; remove sediment/no-ops; keep references co-located or disclosed; update docs/indexes only when behavior or packaging changes. | Diff contains only intended behavior/package changes, validators pass, and old behavior is either preserved or deliberately replaced. |
 | **Delete skill** | Confirm it is unpromoted, duplicated, unsafe, stale, or absorbed; remove manifest/README/dependency references; name the replacement/dependency if any. | No references to the deleted skill remain, validation passes, and users have a clear migration path or deliberate removal note. |
 | **Import/adapt skill** | Audit external candidate; choose install/reference/adapter/umbrella/fork; preserve attribution; copy only owned local deltas; run security gate on upstream files before importing. | Import strategy is recorded and no upstream prose is copied unless fork-with-owner is explicit. |
+
+### Category CRUD
+
+A category is a marketplace plugin under `plugins/<category-name>/` with its own `.claude-plugin/plugin.json`, `skills/README.md`, and promoted skills. Use categories for durable domains such as `personal-skills` or `marketing`, not for one-off projects.
+
+| Operation | Required checks | Completion criterion |
+|---|---|---|
+| **Create category** | Choose a kebab-case plugin/category name; add `plugins/<category>/.claude-plugin/plugin.json`; add `plugins/<category>/skills/README.md`; register the plugin in `.claude-plugin/marketplace.json`; add at least one real promoted skill; update top-level README/AGENTS if behavior changes. | Marketplace manifest, category manifest, README, and validator all agree; category has real local value and no placeholder-only skill. |
+| **Read / audit category** | Inspect category manifest, skills list, bucket README, top-level README entry, dependencies, version, and whether skills belong together. | Output recommends keep, split, merge, rename, delete, or promote dependency/reference. |
+| **Update category** | Patch the narrowest manifest/docs/skills delta; keep category boundaries stable; bump only the changed plugin version for shipped behavior changes. | Only intended category files change, and all category skill names resolve. |
+| **Delete category** | Confirm no promoted plugin install path still needs it; remove marketplace entry, category directory, top-level README commands, and dependency notes or migration path. | No dangling `plugins/<category>` or `/category:skill` references remain; validation passes. |
+| **Move skill between categories** | Keep `name` stable unless intentionally renamed; update old/new manifests and READMEs; update top-level examples; record migration path if user-invoked command changes. | Old category no longer lists the skill, new category does, and command/path references are updated. |
 
 ### Dependency CRUD
 
@@ -119,7 +132,7 @@ Return a compact audit report:
 ```md
 ## Skill audit: <change summary>
 
-- CRUD operation: create | read/audit | update | delete | import/adapt | dependency-create/update/delete | plugin-dependency
+- CRUD operation: skill-create/read/update/delete/import | category-create/read/update/delete/move | dependency-create/read/update/delete | plugin-dependency
 - Invocation: model-invoked | user-invoked | mixed
 - Local value: keep | merge | remove | fork-with-owner
 - Upstream dependency scan: skipped | inspected <source> because <trigger>

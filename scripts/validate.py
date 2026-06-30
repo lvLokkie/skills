@@ -1,20 +1,18 @@
 #!/usr/bin/env python3
-"""Validate the personal skills marketplace manifest and skill frontmatter."""
+"""Validate the skills marketplace manifest, plugin manifests, and skill frontmatter."""
 from __future__ import annotations
 
 import json
 import sys
 from pathlib import Path
+from typing import Any, NoReturn
 
 ROOT = Path(__file__).resolve().parents[1]
-PLUGIN = ROOT / "plugins" / "personal-skills"
-MANIFEST = PLUGIN / ".claude-plugin" / "plugin.json"
-SKILLS_DIR = PLUGIN / "skills"
+MARKETPLACE = ROOT / ".claude-plugin" / "marketplace.json"
 README = ROOT / "README.md"
-BUCKET_README = SKILLS_DIR / "README.md"
 
 
-def fail(message: str) -> None:
+def fail(message: str) -> NoReturn:
     print(f"ERROR: {message}")
     sys.exit(1)
 
@@ -37,46 +35,109 @@ def parse_frontmatter(path: Path) -> dict[str, str]:
     return data
 
 
-def main() -> None:
-    manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
+def load_json(path: Path) -> dict[str, Any]:
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        fail(f"{path.relative_to(ROOT)}: invalid JSON: {exc}")
+    if not isinstance(data, dict):
+        fail(f"{path.relative_to(ROOT)}: expected JSON object")
+    return data
+
+
+def validate_plugin(plugin_entry: object, top_readme: str) -> tuple[str, int]:
+    if not isinstance(plugin_entry, dict):
+        fail("marketplace plugin entry must be an object")
+    raw_name = plugin_entry.get("name")
+    raw_source = plugin_entry.get("source")
+    if not isinstance(raw_name, str) or not raw_name:
+        fail("marketplace plugin entry missing name")
+    name = raw_name
+    if not isinstance(raw_source, str) or not raw_source:
+        fail(f"marketplace plugin {name}: missing source")
+    source = raw_source
+
+    plugin_root = (ROOT / source).resolve()
+    try:
+        plugin_root.relative_to(ROOT.resolve())
+    except ValueError:
+        fail(f"marketplace plugin {name}: source escapes repo root: {source}")
+    if not plugin_root.is_dir():
+        fail(f"marketplace plugin {name}: source directory missing: {source}")
+
+    manifest_path = plugin_root / ".claude-plugin" / "plugin.json"
+    if not manifest_path.exists():
+        fail(f"marketplace plugin {name}: missing .claude-plugin/plugin.json")
+    manifest = load_json(manifest_path)
+    if manifest.get("name") != name:
+        fail(f"{manifest_path.relative_to(ROOT)}: manifest name must match marketplace entry {name!r}")
+
     skills = manifest.get("skills")
     if not isinstance(skills, list) or not skills:
-        fail("plugin.json must contain a non-empty skills list")
+        fail(f"{manifest_path.relative_to(ROOT)} must contain a non-empty skills list")
+
+    skills_dir = plugin_root / "skills"
+    bucket_readme = skills_dir / "README.md"
+    if not bucket_readme.exists():
+        fail(f"{skills_dir.relative_to(ROOT)}: missing README.md")
+    bucket_text = bucket_readme.read_text(encoding="utf-8")
+
+    if name not in top_readme:
+        fail(f"README.md does not mention marketplace plugin {name}")
 
     seen: set[str] = set()
     for rel in skills:
-        skill_dir = (PLUGIN / rel).resolve()
+        if not isinstance(rel, str):
+            fail(f"{manifest_path.relative_to(ROOT)}: skill path must be a string")
+        skill_dir = (plugin_root / rel).resolve()
         try:
-            skill_dir.relative_to(PLUGIN.resolve())
+            skill_dir.relative_to(plugin_root)
         except ValueError:
-            fail(f"skill path escapes plugin root: {rel}")
+            fail(f"{manifest_path.relative_to(ROOT)}: skill path escapes plugin root: {rel}")
         skill_file = skill_dir / "SKILL.md"
         if not skill_file.exists():
             fail(f"manifest skill missing SKILL.md: {rel}")
         fm = parse_frontmatter(skill_file)
-        name = fm.get("name") or skill_dir.name
-        if name != skill_dir.name:
+        skill_name = fm.get("name") or skill_dir.name
+        if skill_name != skill_dir.name:
             fail(f"{skill_file.relative_to(ROOT)}: frontmatter name must match directory")
         if not fm.get("description"):
             fail(f"{skill_file.relative_to(ROOT)}: description is required")
-        seen.add(name)
+        if skill_name in seen:
+            fail(f"{manifest_path.relative_to(ROOT)}: duplicate skill {skill_name}")
+        seen.add(skill_name)
 
-    actual = {p.parent.name for p in SKILLS_DIR.glob("*/SKILL.md")}
+    actual = {p.parent.name for p in skills_dir.glob("*/SKILL.md")}
     extra = actual - seen
     if extra:
-        fail(f"skill folders not listed in plugin.json: {', '.join(sorted(extra))}")
+        fail(f"{skills_dir.relative_to(ROOT)}: skill folders not listed in plugin.json: {', '.join(sorted(extra))}")
 
-    for doc in (README, BUCKET_README):
-        text = doc.read_text(encoding="utf-8")
-        for name in sorted(seen):
-            if name not in text:
-                fail(f"{doc.relative_to(ROOT)} does not mention promoted skill {name}")
+    for skill_name in sorted(seen):
+        if skill_name not in bucket_text:
+            fail(f"{bucket_readme.relative_to(ROOT)} does not mention promoted skill {skill_name}")
+        if skill_name not in top_readme:
+            fail(f"README.md does not mention promoted skill {skill_name}")
 
-    marketplace = json.loads((ROOT / ".claude-plugin" / "marketplace.json").read_text(encoding="utf-8"))
-    if not marketplace.get("plugins"):
+    return name, len(seen)
+
+
+def main() -> None:
+    marketplace = load_json(MARKETPLACE)
+    plugins = marketplace.get("plugins")
+    if not isinstance(plugins, list) or not plugins:
         fail("marketplace.json must list at least one plugin")
 
-    print(f"OK: {len(seen)} promoted skill(s) validated")
+    top_readme = README.read_text(encoding="utf-8")
+    total_skills = 0
+    names: set[str] = set()
+    for plugin_entry in plugins:
+        plugin_name, skill_count = validate_plugin(plugin_entry, top_readme)
+        if plugin_name in names:
+            fail(f"marketplace.json lists duplicate plugin {plugin_name}")
+        names.add(plugin_name)
+        total_skills += skill_count
+
+    print(f"OK: {len(names)} plugin(s), {total_skills} promoted skill(s) validated")
 
 
 if __name__ == "__main__":

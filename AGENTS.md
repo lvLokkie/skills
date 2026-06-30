@@ -6,10 +6,10 @@ Personal, vendor-neutral skills marketplace. Single source of truth for Ivan's p
 
 | Path | Role | Edit? |
 |---|---|---|
-| `plugins/personal-skills/skills/<name>/SKILL.md` | Source for shipped Claude skills | ✅ source |
-| `plugins/personal-skills/skills/README.md` | Skill bucket catalog grouped by invocation class | ✅ source |
-| `.claude-plugin/marketplace.json` | Marketplace entry pointing at plugin packages | ✅ thin |
-| `plugins/personal-skills/.claude-plugin/plugin.json` | Plugin manifest and promoted skill list | ✅ thin |
+| `plugins/<category>/skills/<name>/SKILL.md` | Source for shipped Claude skills | ✅ source |
+| `plugins/<category>/skills/README.md` | Category skill catalog grouped by invocation class | ✅ source |
+| `.claude-plugin/marketplace.json` | Marketplace entry pointing at plugin/category packages | ✅ thin |
+| `plugins/<category>/.claude-plugin/plugin.json` | Category plugin manifest and promoted skill list | ✅ thin |
 | `docs/` | Invocation model, dependency policy, dependency rationale, ADRs/reference notes | ✅ source |
 | `AGENTS.md` | Canonical agent instructions for this repo | ✅ source |
 | `CLAUDE.md`, `GEMINI.md`, `.cursor/*` | Generated compatibility files if present | ❌ never by hand |
@@ -32,14 +32,14 @@ Keep README, bucket README, and plugin manifest in sync. See `docs/invocation.md
 
 ## 4. Skill authoring
 
-- One skill = one folder under `plugins/personal-skills/skills/<kebab-name>/`.
+- One skill = one folder under `plugins/<category>/skills/<kebab-name>/`.
 - Frontmatter must include `name` and `description`.
 - Keep `SKILL.md` focused on the execution path; put heavy references in sibling files.
 - Every step needs a checkable completion criterion.
 - Delete no-op prose. If a sentence does not change behavior, output, verification, or refusal boundary, remove it.
-- Use `skill-audit` on every local skill, skill README, plugin manifest, dependency policy, or skill-packaging change.
+- Use `skill-audit` on every local skill, skill category/plugin, skill README, plugin manifest, marketplace manifest, dependency policy, or skill-packaging change.
 - Use `skill-audit` before installing, copying, forking, importing, or adapting third-party skills.
-- Apply the skill/dependency CRUD gates in `skill-audit` for create, read/audit, update, delete, import/adapt, and plugin dependency promotion.
+- Apply the skill/category/dependency CRUD gates in `skill-audit` for create, read/audit, update, delete, move, import/adapt, and plugin dependency promotion.
 
 ## 5. External tools and dependencies
 
@@ -53,7 +53,7 @@ Keep README, bucket README, and plugin manifest in sync. See `docs/invocation.md
 
 ## 6. Versioning and releases
 
-- Bump `plugins/personal-skills/.claude-plugin/plugin.json` version on behavior changes.
+- Bump the owning `plugins/<category>/.claude-plugin/plugin.json` version on behavior changes.
 - Keep `.claude-plugin/marketplace.json` description aligned with the plugin manifest.
 - Do not commit or push without explicit user instruction.
 

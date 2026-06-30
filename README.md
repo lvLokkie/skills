@@ -50,10 +50,10 @@ None yet. Prefer direct upstream dependencies for generic command skills like `h
 
 | Path | Role |
 |---|---|
-| `.claude-plugin/marketplace.json` | Claude marketplace entry pointing at the plugin package. |
-| `plugins/personal-skills/.claude-plugin/plugin.json` | Thin plugin manifest; must list promoted skill folders. |
-| `plugins/personal-skills/skills/<name>/SKILL.md` | Source of truth for shipped Claude skills. |
-| `plugins/personal-skills/skills/README.md` | Bucket catalog grouped by invocation class. |
+| `.claude-plugin/marketplace.json` | Claude marketplace entry pointing at category plugin packages. |
+| `plugins/<category>/.claude-plugin/plugin.json` | Thin category plugin manifest; must list promoted skill folders. |
+| `plugins/<category>/skills/<name>/SKILL.md` | Source of truth for shipped Claude skills. |
+| `plugins/<category>/skills/README.md` | Category catalog grouped by invocation class. |
 | `docs/invocation.md` | Invocation taxonomy and dependency style. |
 | `docs/dependencies.md` | General dependency policy: hard/soft/reference/tool/plugin deps, fallbacks, and no-vendoring rules. |
 | `docs/mattpocock-dependency-candidates.md` | Reference analysis and shortlist of upstream skills to depend on or adapt. |
@@ -61,14 +61,15 @@ None yet. Prefer direct upstream dependencies for generic command skills like `h
 
 ## Add or revise a skill
 
-1. Create or edit `plugins/personal-skills/skills/<name>/SKILL.md`.
+1. Create or edit `plugins/<category>/skills/<name>/SKILL.md`.
 2. Decide invocation class:
    - model-invoked: rich trigger phrasing in `description`;
    - user-invoked: add `disable-model-invocation: true` and use a human-facing one-line description.
 3. Add heavy references as sibling `.md` files, not into the top of `SKILL.md`.
 4. Update:
-   - `plugins/personal-skills/skills/README.md`
-   - `plugins/personal-skills/.claude-plugin/plugin.json`
+   - `plugins/<category>/skills/README.md`
+   - `plugins/<category>/.claude-plugin/plugin.json`
+   - `.claude-plugin/marketplace.json` when adding/removing a category
    - this README's promoted-skill table
 5. Run validation:
 
@@ -76,7 +77,20 @@ None yet. Prefer direct upstream dependencies for generic command skills like `h
 python scripts/validate.py
 ```
 
-6. Bump `plugins/personal-skills/.claude-plugin/plugin.json` version on behavior changes.
+6. Bump the owning `plugins/<category>/.claude-plugin/plugin.json` version on behavior changes.
+
+## Add or revise a skill category
+
+A category is a marketplace plugin under `plugins/<category>/`. Use categories for durable domains, not one-off projects.
+
+1. Create or edit:
+   - `plugins/<category>/.claude-plugin/plugin.json`
+   - `plugins/<category>/skills/README.md`
+   - one or more real `plugins/<category>/skills/<name>/SKILL.md` files
+2. Register or update the category in `.claude-plugin/marketplace.json`.
+3. Update this README with install/run examples and promoted skills.
+4. Run `skill-audit` category CRUD gates: create/read/update/delete/move, packaging, dependency policy, and security scan.
+5. Run `python scripts/validate.py`, `git diff --check`, JSON parse, and plugin validation when available.
 
 ## Dependency policy
 
