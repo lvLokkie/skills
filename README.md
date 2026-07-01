@@ -10,8 +10,8 @@ Claude Code marketplace install:
 
 ```text
 /plugin marketplace add lvLokkie/skills
-/plugin install general@ivan-skills-marketplace
-/plugin install marketing@ivan-skills-marketplace
+/plugin install general@lvlokkie-skills-marketplace
+/plugin install marketing@lvlokkie-skills-marketplace
 ```
 
 Run promoted skills:
