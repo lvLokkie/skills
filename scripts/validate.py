@@ -10,6 +10,7 @@ from typing import Any, NoReturn
 ROOT = Path(__file__).resolve().parents[1]
 MARKETPLACE = ROOT / ".claude-plugin" / "marketplace.json"
 README = ROOT / "README.md"
+IN_PROGRESS = ROOT / "plugins" / "in-progress"
 
 
 def fail(message: str) -> NoReturn:
@@ -154,6 +155,41 @@ def validate_plugin(plugin_entry: object, top_readme: str) -> tuple[str, int]:
     return name, len(seen)
 
 
+def validate_in_progress(top_readme: str, marketplace_names: set[str]) -> int:
+    """Validate the optional draft lifecycle category without publishing it."""
+    if not IN_PROGRESS.exists():
+        return 0
+
+    if "in-progress" in marketplace_names:
+        fail("in-progress is a lifecycle category and must not be listed in marketplace.json")
+
+    manifest_path = IN_PROGRESS / ".claude-plugin" / "plugin.json"
+    if manifest_path.exists():
+        fail(f"{manifest_path.relative_to(ROOT)}: in-progress must not define a publishable plugin manifest")
+
+    skills_dir = IN_PROGRESS / "skills"
+    bucket_readme = skills_dir / "README.md"
+    if not bucket_readme.exists():
+        fail(f"{skills_dir.relative_to(ROOT)}: draft lifecycle category requires README.md")
+    bucket_text = bucket_readme.read_text(encoding="utf-8")
+
+    if "/in-progress:" in top_readme:
+        fail("README.md must not advertise /in-progress:* public run examples")
+
+    draft_files = sorted(skills_dir.glob("*/SKILL.md"))
+    for skill_file in draft_files:
+        fm = parse_frontmatter(skill_file)
+        skill_name = fm.get("name") or skill_file.parent.name
+        if skill_name != skill_file.parent.name:
+            fail(f"{skill_file.relative_to(ROOT)}: frontmatter name must match directory")
+        if not fm.get("description"):
+            fail(f"{skill_file.relative_to(ROOT)}: description is required")
+        if skill_name not in bucket_text:
+            fail(f"{bucket_readme.relative_to(ROOT)} does not mention draft skill {skill_name}")
+
+    return len(draft_files)
+
+
 def main() -> None:
     marketplace = load_json(MARKETPLACE)
     plugins = marketplace.get("plugins")
@@ -170,7 +206,9 @@ def main() -> None:
         names.add(plugin_name)
         total_skills += skill_count
 
-    print(f"OK: {len(names)} plugin(s), {total_skills} promoted skill(s) validated")
+    draft_count = validate_in_progress(top_readme, names)
+    suffix = f", {draft_count} draft skill(s) checked" if draft_count else ""
+    print(f"OK: {len(names)} plugin(s), {total_skills} promoted skill(s) validated{suffix}")
 
 
 if __name__ == "__main__":

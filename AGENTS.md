@@ -8,6 +8,7 @@ Personal, vendor-neutral skills marketplace. Single source of truth for Ivan's p
 |---|---|---|
 | `plugins/<category>/skills/<name>/SKILL.md` | Source for shipped Claude skills | ✅ source |
 | `plugins/<category>/skills/README.md` | Category skill catalog grouped by invocation class | ✅ source |
+| `plugins/in-progress/skills/<name>/SKILL.md` | Draft skill lifecycle area; not published or installed | ✅ source |
 | `.claude-plugin/marketplace.json` | Marketplace entry pointing at plugin/category packages | ✅ thin |
 | `plugins/<category>/.claude-plugin/plugin.json` | Category plugin manifest and promoted skill list | ✅ thin |
 | `.mcp.json` or runtime MCP manifest, if added | MCP server distribution metadata only: endpoints/packages/placeholders, no secrets | ✅ thin |
@@ -36,6 +37,7 @@ Keep README, bucket README, and plugin manifest in sync. See `docs/invocation.md
 ## 4. Skill authoring
 
 - One skill = one folder under `plugins/<category>/skills/<kebab-name>/`.
+- Use `plugins/in-progress/skills/<kebab-name>/` for draft skills that should not be deployed to users yet; `in-progress` is a lifecycle category, not a marketplace plugin.
 - Frontmatter must include `name` and `description`.
 - Keep `SKILL.md` focused on the execution path; put heavy references in sibling files.
 - Every step needs a checkable completion criterion.
@@ -63,6 +65,7 @@ Keep README, bucket README, and plugin manifest in sync. See `docs/invocation.md
 
 - Bump the owning `plugins/<category>/.claude-plugin/plugin.json` version on behavior changes.
 - Keep `.claude-plugin/marketplace.json` description aligned with the plugin manifest.
+- Never list `in-progress` in `.claude-plugin/marketplace.json`, install examples, or public run examples. Promote by moving the skill into a real category, updating that category manifest/README, and passing `skill-audit`.
 - Do not commit or push without explicit user instruction.
 
 ## 7. Definition of done

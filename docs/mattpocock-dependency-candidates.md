@@ -45,6 +45,7 @@ Do not port full upstream procedures into this repo just because they overlap wi
 | P0 | `diagnosing-bugs` | Dependency/reference; local deterministic loop hooks only | Deterministic reproduce → minimise → hypothesise → instrument → fix → regression-test loop. | Do not copy the loop; add local Hermes debugging entry points and cleanup conventions. |
 | P1 | `codebase-design`, `domain-modeling`, `improve-codebase-architecture` | Prefer direct upstream dependency for Claude; keep Hermes inherited skill only where Hermes cannot consume dependency | Strong shared language: deep modules, seams, adapters, locality, leverage, deletion test, CONTEXT/ADR discipline. | Avoid maintaining a forked text copy in this marketplace. |
 | P1 | `prototype` | Dependency/reference; local run/delete policy only | One-question prototype; split logic/state prototypes from UI prototypes; delete-or-absorb after verdict. | Local skill should only specify Ivan repo hygiene and validation. |
+| P1 | `in-progress/wizard` | Reference first; local draft adapter may live in our non-published `plugins/in-progress` lifecycle category if we need repeatable setup wizard generation | Interactive bash wizard for manual third-party setup/migrations: staged UX, URL opening, hidden secret capture, `.env` upserts, GitHub Actions secrets/vars, static validation without running the wizard end-to-end. | Do not promote the whole upstream `in-progress` category. Track `wizard` as a reviewed draft candidate; if adopted locally, keep it non-published until the promotion gate in `docs/lifecycle.md` passes. |
 | P1 | `handoff` | Depend where available; local Hermes handoff remains platform adapter | Compact artifact for another agent/session, useful for Telegram/cron/kanban handoffs. | Do not duplicate in marketplace unless a platform cannot use the dependency. |
 | P2 | `to-prd`, `to-issues`, `triage`, `implement` | Adapt selectively | Issue/PRD state machine and vertical issue slicing are useful, but upstream assumes its setup skill and tracker mappings. | Only import after local issue-tracker convention is stable. |
 | P3 | `setup-pre-commit`, `git-guardrails-claude-code`, `scaffold-exercises`, `migrate-to-shoehorn` | Usually skip/direct install only when needed | Tool/course-specific or Claude-specific. | Do not add as default dependencies. |
@@ -52,7 +53,7 @@ Do not port full upstream procedures into this repo just because they overlap wi
 ## Not recommended as dependencies
 
 - `personal/*` — tied to Matt's own setup.
-- `in-progress/*` — drafts, not promoted upstream.
+- `in-progress/*` — upstream drafts, not promoted automatically. Exception: individually reviewed candidates such as `in-progress/wizard` may be tracked as reference-only or adapted into our non-published `plugins/in-progress` lifecycle category until intentionally promoted.
 - `deprecated/*` — upstream has replaced or retired them.
 
 ## Proposed dependency policy

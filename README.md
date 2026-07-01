@@ -40,6 +40,8 @@ For private clones, installation needs a git credential helper or `GITHUB_TOKEN`
 
 See [docs/invocation.md](./docs/invocation.md), [docs/dependencies.md](./docs/dependencies.md), and [docs/mattpocock-dependency-candidates.md](./docs/mattpocock-dependency-candidates.md).
 
+Draft skills that are not ready for users live in the lifecycle category described in [docs/lifecycle.md](./docs/lifecycle.md); `in-progress` is intentionally not installed from the marketplace.
+
 ## Promoted categories and skills
 
 ### `general`
@@ -75,13 +77,14 @@ None yet. Prefer direct upstream dependencies for generic command skills like `h
 | `plugins/<category>/skills/<name>/SKILL.md` | Source of truth for shipped Claude skills. |
 | `plugins/<category>/skills/README.md` | Category catalog grouped by invocation class. |
 | `docs/invocation.md` | Invocation taxonomy and dependency style. |
+| `docs/lifecycle.md` | Draft → published skill lifecycle, including the non-published `in-progress` category. |
 | `docs/dependencies.md` | General dependency policy: hard/soft/reference/tool/MCP/plugin deps, fallbacks, and no-vendoring rules. |
 | `docs/mattpocock-dependency-candidates.md` | Reference analysis and shortlist of upstream skills to depend on or adapt. |
 | `AGENTS.md` | Working rules for agents editing this repo. |
 
 ## Add or revise a skill
 
-1. Create or edit `plugins/<category>/skills/<name>/SKILL.md`.
+1. Create or edit `plugins/<category>/skills/<name>/SKILL.md`, or use `plugins/in-progress/skills/<name>/SKILL.md` when the skill is still a draft that must not be installed by users.
 2. Decide invocation class:
    - model-invoked: rich trigger phrasing in `description`;
    - user-invoked: add `disable-model-invocation: true` and use a human-facing one-line description.
@@ -102,6 +105,8 @@ python scripts/validate.py
 ## Add or revise a skill category
 
 A category is a marketplace plugin under `plugins/<category>/`. Use categories for durable domains, not one-off projects.
+
+Exception: `plugins/in-progress` is a non-published lifecycle category for drafts. Do not register it in `.claude-plugin/marketplace.json`; promote drafts by moving them into a real category and passing the promotion gate in [docs/lifecycle.md](./docs/lifecycle.md).
 
 1. Create or edit:
    - `plugins/<category>/.claude-plugin/plugin.json`
