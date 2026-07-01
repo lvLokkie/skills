@@ -10,15 +10,15 @@ Claude Code marketplace install:
 
 ```text
 /plugin marketplace add lvLokkie/skills
-/plugin install personal-skills@personal-skills-marketplace
-/plugin install marketing@personal-skills-marketplace
+/plugin install general@ivan-skills-marketplace
+/plugin install marketing@ivan-skills-marketplace
 ```
 
 Run promoted skills:
 
 ```text
-/personal-skills:skill-audit
-/personal-skills:report-writing
+/general:skill-audit
+/general:report-writing
 /marketing:lidfly-mcp
 /marketing:ad-campaign-operations
 /marketing:avito-ads-feed
@@ -40,14 +40,14 @@ See [docs/invocation.md](./docs/invocation.md), [docs/dependencies.md](./docs/de
 
 ## Promoted categories and skills
 
-### `personal-skills`
+### `general`
 
 #### Model-invoked
 
 | Skill | Purpose |
 |---|---|
-| [skill-audit](./plugins/personal-skills/skills/skill-audit/SKILL.md) | Audit local skill/package changes and external skill candidates against `writing-great-skills`, Ivan packaging gates, and industrial security checks before publishing or importing. |
-| [report-writing](./plugins/personal-skills/skills/report-writing/SKILL.md) | Write evidence-backed reports, briefs, and decision memos with sources, confidence labels, conclusions, and next actions. |
+| [skill-audit](./plugins/general/skills/skill-audit/SKILL.md) | Audit local skill/package changes and external skill candidates against `writing-great-skills`, Ivan packaging gates, and industrial security checks before publishing or importing. |
+| [report-writing](./plugins/general/skills/report-writing/SKILL.md) | Write evidence-backed reports, briefs, and decision memos with sources, confidence labels, conclusions, and next actions. |
 
 ### `marketing`
 
@@ -73,7 +73,7 @@ None yet. Prefer direct upstream dependencies for generic command skills like `h
 | `plugins/<category>/skills/<name>/SKILL.md` | Source of truth for shipped Claude skills. |
 | `plugins/<category>/skills/README.md` | Category catalog grouped by invocation class. |
 | `docs/invocation.md` | Invocation taxonomy and dependency style. |
-| `docs/dependencies.md` | General dependency policy: hard/soft/reference/tool/plugin deps, fallbacks, and no-vendoring rules. |
+| `docs/dependencies.md` | General dependency policy: hard/soft/reference/tool/MCP/plugin deps, fallbacks, and no-vendoring rules. |
 | `docs/mattpocock-dependency-candidates.md` | Reference analysis and shortlist of upstream skills to depend on or adapt. |
 | `AGENTS.md` | Working rules for agents editing this repo. |
 

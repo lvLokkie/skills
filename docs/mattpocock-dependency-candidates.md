@@ -33,7 +33,7 @@ Do not port full upstream procedures into this repo just because they overlap wi
 |---|---|---|---|
 | `~/.hermes/skills/software-development/improve-codebase-architecture` | `skills/engineering/improve-codebase-architecture` | Directly inherited/adapted in active Hermes skills | Keep as a local Hermes skill; do not duplicate into this marketplace unless packaging Hermes skills here becomes a goal. |
 | `~/.hermes/skills/software-development/domain-grill-with-docs` | `skills/engineering/grill-with-docs` + domain modeling ideas | Adapted for Ivan/Hermes repo conventions | Keep local adaptation; dependency would be conceptual, not a direct install. |
-| `plugins/personal-skills/skills/skill-audit` | Overlaps with `writing-great-skills` pruning/no-op discipline | Local derivative idea, not a copied upstream skill | Keep as our own marketplace skill; use upstream as reference for vocabulary and invocation model. |
+| `plugins/general/skills/skill-audit` | Overlaps with `writing-great-skills` pruning/no-op discipline | Local derivative idea, not a copied upstream skill | Keep as our own marketplace skill; use upstream as reference for vocabulary and invocation model. |
 
 ## Potential dependencies from `mattpocock/skills`
 

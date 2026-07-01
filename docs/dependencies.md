@@ -130,7 +130,7 @@ Until then, use documented upstream references and local adapters.
 
 ## Versioning impact
 
-- Bump `plugins/personal-skills/.claude-plugin/plugin.json` when a shipped skill, shipped support file, or plugin manifest behavior changes.
+- Bump the owning `plugins/<category>/.claude-plugin/plugin.json` when a shipped skill, shipped support file, or plugin manifest behavior changes.
 - Do not bump the plugin version for repo-only docs that do not change installed skill behavior.
 - If dependency policy changes alter how a promoted skill should execute, update the skill and bump the plugin version in the same commit.
 

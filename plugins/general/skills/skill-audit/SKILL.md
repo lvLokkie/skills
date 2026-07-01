@@ -79,7 +79,7 @@ Classify each change as one or more CRUD operations, then apply the matching gat
 
 ### Category CRUD
 
-A category is a marketplace plugin under `plugins/<category-name>/` with its own `.claude-plugin/plugin.json`, `skills/README.md`, and promoted skills. Use categories for durable domains such as `personal-skills` or `marketing`, not for one-off projects.
+A category is a marketplace plugin under `plugins/<category-name>/` with its own `.claude-plugin/plugin.json`, `skills/README.md`, and promoted skills. Use categories for durable domains such as `general` or `marketing`, not for one-off projects.
 
 | Operation | Required checks | Completion criterion |
 |---|---|---|
@@ -156,7 +156,7 @@ Use behavioral replacements:
 | No-op | Behavioral replacement |
 |---|---|
 | Be thorough. | Check changed skill files, READMEs, manifest, dependency notes, validators, and secret scan before finalizing. |
-| Follow best practices. | Run `python scripts/validate.py`; if Claude CLI is available, run `claude plugin validate .` and `claude plugin validate plugins/personal-skills`. |
+| Follow best practices. | Run `python scripts/validate.py`; if Claude CLI is available, run `claude plugin validate .` and `claude plugin validate plugins/<changed-category>`. |
 | Use this whenever relevant. | Use on every local skill or skill-packaging change, and before importing an external skill candidate. |
 | Keep it concise. | Move branch-only reference out of `SKILL.md` into a sibling file with a clear pointer. |
 

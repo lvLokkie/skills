@@ -1,6 +1,6 @@
-# Personal Skills
+# General Skills
 
-Promoted skills shipped by the `personal-skills` plugin. Keep this list in sync with `.claude-plugin/plugin.json` and the top-level README.
+Promoted skills shipped by the `general` plugin. Keep this list in sync with `.claude-plugin/plugin.json` and the top-level README.
 
 ## Model-invoked
 

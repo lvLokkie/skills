@@ -75,5 +75,5 @@ Keep README, bucket README, and plugin manifest in sync. See `docs/invocation.md
 - [ ] No commit or push was performed unless Ivan explicitly asked for it
 - [ ] `python scripts/validate.py` passes
 - [ ] `git diff --check` passes
-- [ ] Plugin JSON parses and `claude plugin validate .` / `claude plugin validate plugins/personal-skills` pass when Claude CLI is available
+- [ ] Plugin JSON parses and `claude plugin validate .` plus `claude plugin validate plugins/<changed-category>` pass when Claude CLI is available
 - [ ] `skill-audit` security gate was run on changed/candidate files

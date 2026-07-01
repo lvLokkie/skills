@@ -1,14 +1,14 @@
 {
-  "name": "personal-skills-marketplace",
+  "name": "ivan-skills-marketplace",
   "owner": {
     "name": "Ivan Ryazanov"
   },
-  "description": "Ivan's universal agent skills marketplace: vendor-neutral personal skills packaged for Claude Code and portable to Hermes/Codex.",
+  "description": "Ivan's universal agent skills marketplace: vendor-neutral skills packaged for Claude Code and portable to Hermes/Codex.",
   "plugins": [
     {
-      "name": "personal-skills",
-      "source": "./plugins/personal-skills",
-      "description": "Ivan's promoted personal agent skills."
+      "name": "general",
+      "source": "./plugins/general",
+      "description": "General-purpose agent skills that do not belong to a narrower domain category."
     },
     {
       "name": "marketing",
