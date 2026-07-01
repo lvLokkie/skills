@@ -45,6 +45,37 @@ def load_json(path: Path) -> dict[str, Any]:
     return data
 
 
+def validate_optional_mcp(plugin_root: Path) -> None:
+    mcp_path = plugin_root / ".mcp.json"
+    if not mcp_path.exists():
+        return
+
+    data = load_json(mcp_path)
+    servers = data.get("mcpServers")
+    if not isinstance(servers, dict) or not servers:
+        fail(f"{mcp_path.relative_to(ROOT)}: must contain non-empty mcpServers object")
+
+    for server_name, server_config in servers.items():
+        if not isinstance(server_name, str) or not server_name:
+            fail(f"{mcp_path.relative_to(ROOT)}: MCP server names must be non-empty strings")
+        if not isinstance(server_config, dict):
+            fail(f"{mcp_path.relative_to(ROOT)}: MCP server {server_name!r} must be an object")
+
+        has_url = isinstance(server_config.get("url"), str) and bool(server_config.get("url"))
+        has_command = isinstance(server_config.get("command"), str) and bool(server_config.get("command"))
+        if not has_url and not has_command:
+            fail(f"{mcp_path.relative_to(ROOT)}: MCP server {server_name!r} needs url or command")
+
+        headers = server_config.get("headers", {})
+        if headers is not None and not isinstance(headers, dict):
+            fail(f"{mcp_path.relative_to(ROOT)}: MCP server {server_name!r} headers must be an object")
+        for header_name, header_value in (headers or {}).items():
+            if not isinstance(header_name, str) or not isinstance(header_value, str):
+                fail(f"{mcp_path.relative_to(ROOT)}: MCP server {server_name!r} headers must be string values")
+            if header_name.lower() == "authorization" and "bearer " in header_value.lower() and "${" not in header_value:
+                fail(f"{mcp_path.relative_to(ROOT)}: MCP server {server_name!r} Authorization header must use an env placeholder")
+
+
 def validate_plugin(plugin_entry: object, top_readme: str) -> tuple[str, int]:
     if not isinstance(plugin_entry, dict):
         fail("marketplace plugin entry must be an object")
@@ -71,6 +102,8 @@ def validate_plugin(plugin_entry: object, top_readme: str) -> tuple[str, int]:
     manifest = load_json(manifest_path)
     if manifest.get("name") != name:
         fail(f"{manifest_path.relative_to(ROOT)}: manifest name must match marketplace entry {name!r}")
+
+    validate_optional_mcp(plugin_root)
 
     skills = manifest.get("skills")
     if not isinstance(skills, list) or not skills:

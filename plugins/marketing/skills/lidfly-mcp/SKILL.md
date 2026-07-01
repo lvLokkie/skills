@@ -26,13 +26,14 @@ Public documentation observed during import:
 
 Before using LidFly MCP:
 
-1. Check whether a LidFly MCP server is configured in the current agent runtime.
-2. If unavailable, give the setup path without asking for secrets in chat:
+1. Check whether a LidFly MCP server named `lidfly` is configured and at least one expected tool is discovered. Hermes-style tools should appear with the `mcp_lidfly_*` prefix.
+2. Prefer the category plugin's optional `plugins/marketing/.mcp.json` remote HTTP config when the runtime supports project/plugin MCP manifests. It uses `https://lidfly.ru/mcp/v3` with `Authorization: Bearer ${LIDFLY_API_KEY}`; the real value must live in the runtime env/secret store.
+3. If unavailable, give the setup path without asking for secrets in chat:
    - create/login to LidFly account;
    - copy API key from the LidFly account UI;
-   - configure MCP endpoint `https://lidfly.ru/mcp/v3` in the target client;
+   - configure MCP endpoint `https://lidfly.ru/mcp/v3` in the target client or install the plugin MCP manifest;
    - store the API key in the client/runtime secret store, not in this repo.
-3. If platform calls fail with auth errors, ask Ivan to verify the LidFly account connection/OAuth in LidFly UI; do not request the token value.
+4. If platform calls fail with auth errors, ask Ivan to verify the LidFly account connection/OAuth in LidFly UI; do not request the token value.
 
 ## Operating loop
 

@@ -14,6 +14,8 @@ Claude Code marketplace install:
 /plugin install marketing@lvlokkie-skills-marketplace
 ```
 
+The `marketing` plugin includes an optional LidFly MCP config with a `${LIDFLY_API_KEY}` placeholder; set the secret in the target runtime or use the documented offline fallback.
+
 Run promoted skills:
 
 ```text
@@ -113,7 +115,7 @@ A category is a marketplace plugin under `plugins/<category>/`. Use categories f
 ## Dependency policy
 
 - Do not vendor third-party skill repos by default.
-- Classify dependencies as hard, soft, reference, tool, or plugin dependencies in [docs/dependencies.md](./docs/dependencies.md).
+- Classify dependencies as hard, soft, reference, tool, MCP, or plugin dependencies in [docs/dependencies.md](./docs/dependencies.md).
 - For overlaps, prefer upstream dependency/reference plus a thin local adapter; do not restate the full upstream skill locally.
 - If the target agent cannot consume the upstream skill directly, document the compatibility gap and maintenance owner before forking/adapting text.
 - Do not ship personal, in-progress, or deprecated upstream skills unless there is a fresh local audit.

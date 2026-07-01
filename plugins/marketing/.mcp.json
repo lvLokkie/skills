@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "lidfly": {
+      "type": "http",
+      "url": "https://lidfly.ru/mcp/v3",
+      "headers": {
+        "Authorization": "Bearer ${LIDFLY_API_KEY}"
+      }
+    }
+  }
+}
