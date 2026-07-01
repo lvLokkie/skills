@@ -2,7 +2,7 @@
 
 This repo treats dependencies as **capability contracts**, not as code to vendor. A dependency can be another skill, a plugin, an MCP server, a CLI, an API credential, or a local project convention.
 
-Default rule: keep runtime packages self-contained, document upstream dependencies explicitly, and copy only local adapter behavior that this marketplace owns.
+Default rule: keep runtime packages self-contained, document upstream dependencies explicitly, and copy only local adapter behavior that this marketplace owns. MCP servers are distributed capabilities, not skill bodies: ship only safe metadata/config placeholders unless the target runtime has a verified MCP manifest/install path.
 
 ## Dependency classes
 
@@ -12,6 +12,7 @@ Default rule: keep runtime packages self-contained, document upstream dependenci
 | **Soft skill dependency** | It improves quality but the local skill can still produce useful output. | `docs/dependencies.md` or a short prose pointer in the local skill. | Degrade gracefully and label the fallback. |
 | **Reference dependency** | Upstream is evidence, vocabulary, or inspiration; it is not invoked at runtime. | Case-study docs, source ledger, or skill references. | Cite the upstream; do not copy its procedure. |
 | **Tool dependency** | A CLI, MCP server, runtime, API, or credential is needed for a branch. | The owning skill's `Prerequisites`, `Portability`, or setup section. | Preflight before use; provide fallback or stop condition. |
+| **MCP dependency** | A Model Context Protocol server supplies runtime tools for live reads/writes. | Owning skill plus `docs/dependencies.md`; optional thin `.mcp.json`/runtime manifest only when supported. | Verify live discovery before use; keep secrets out of repo; label fallback output as offline. |
 | **Plugin dependency** | Another installable plugin must be installed with this plugin. | `plugin.json dependencies` only after runtime support is verified. | Pin/version explicitly and validate install behavior. |
 
 ## Patterns observed in larger skill repos
@@ -68,6 +69,52 @@ Example:
 - Stop: do not invent issue numbers or claim GitHub side effects without `gh issue view` read-back.
 ```
 
+## MCP distribution policy
+
+Treat an MCP server as a capability contract with a transport, auth model, tool scope, and verification path. A skill may rely on MCP tools, but must not smuggle the MCP server implementation or credentials into the skill folder.
+
+### Default decision ladder
+
+Use this ladder in order. Do not present all modes as equal choices unless a concrete constraint breaks the default.
+
+| Case | Default solution | Do not do |
+|---|---|---|
+| Hosted/SaaS service with OAuth MCP support | Remote HTTP MCP using OAuth; tokens live in the client/runtime credential store. | Do not ask for tokens in chat or commit static headers. |
+| Hosted/SaaS service with only static token auth | Remote HTTP MCP config with `Authorization: Bearer ${SERVICE_API_KEY}` placeholder; disabled or setup-blocked until the env/secret exists. | Do not paste the real token into `.mcp.json`, docs, examples, or logs. |
+| Local/dev tool or local data source | Stdio MCP using pinned `uvx`/`npx`/binary command, minimal args, and narrow filesystem/network scope. | Do not mount broad home directories, run `curl|bash`, or rely on implicit shell env secrets. |
+| Team/project distribution | Project/plugin `.mcp.json` or runtime manifest with placeholders, scopes, and verification instructions. | Do not commit user/local MCP config, browser profiles, sessions, or generated tool catalogs. |
+| Ivan's personal Hermes runtime | `~/.hermes/config.yaml` `mcp_servers` entry plus local secret source such as `~/.hermes/.env`; restart/new session for discovery. | Do not encode Ivan's machine-local secrets or profile paths in the skills repo. |
+| Runtime cannot consume manifests yet | Documented external MCP plus local adapter skill that gives setup, guardrails, fallback, and stop condition. | Do not fork/bundle just to paper over missing marketplace/runtime support. |
+| Unknown trust, unpinned package, or unverified setup | Mark as `reference`/`documented external MCP`; provide offline fallback only. | Do not install, import, or claim live access until security and discovery are verified. |
+
+For auth, choose in this order: OAuth/credential store → env/secret-store placeholder → disabled setup instructions. Static literal secrets in repo files are always wrong.
+
+For write-capable MCPs, the default operating mode is read-only discovery first; writes need explicit user-approved scope plus read-back verification.
+
+| Distribution mode | Use when | Required rules |
+|---|---|---|
+| **Documented external MCP** | The server is hosted remotely or installed by `npx`/`uvx`/vendor docs. | Owning skill names endpoint/package, transport (`stdio` or HTTP), required scopes, auth storage, preflight/test command, fallback, and stop condition. |
+| **Thin MCP manifest/config snippet** | The target agent/runtime supports MCP manifests or config import. | Commit only package names, URLs, env-var placeholders, disabled-by-default auth placeholders, timeouts, and scope comments; never commit tokens, cookies, local profile paths, or generated tool catalogs. |
+| **Plugin dependency** | The runtime can install another plugin that supplies the MCP capability. | Pass the direct plugin dependency gate below, pin/version it, and verify a clean install discovers the expected MCP tools. |
+| **Local adapter skill** | The server is useful but runtime distribution is not portable yet. | Keep only local routing, guardrails, and setup deltas in `SKILL.md`; leave the server as a documented tool dependency. |
+| **Fork/bundle MCP server** | Only when no safe upstream install path exists and Ivan accepts maintenance ownership. | Record owner, license, pin, update path, security review, and clean install test before copying any server code. |
+
+Every MCP-dependent skill must include:
+
+- server name and transport, plus expected runtime tool-name prefix when relevant;
+- read-only vs write-capable tool split, with writes requiring explicit user-approved scope and read-back verification;
+- auth model: OAuth/env/secret store; remote HTTP Bearer/API tokens must be placeholders or disabled until the user sets the secret;
+- preflight: how to detect the server and verify at least one expected tool before claiming live access;
+- fallback: what offline/local output is allowed when MCP is missing;
+- stop condition: what the agent must not claim or do without MCP read-back.
+
+Security gates for MCP distribution:
+
+- Prefer OAuth or runtime secret stores. Do not commit bearer tokens, cookies, browser session files, account IDs tied to secrets, or machine-local profile paths.
+- For stdio servers, pin package versions where practical and review install/postinstall behavior; do not use `curl|bash`, `sudo`, destructive filesystem access, or broad filesystem mounts by default.
+- For remote HTTP servers, use env placeholders in config snippets and keep unauthenticated placeholders disabled until the secret is present.
+- Do not commit generated MCP tool catalogs. Tool names can drift; skills should state expected prefixes/classes and verify live discovery.
+
 ## Direct plugin dependency gate
 
 Do not add `plugin.json dependencies` until all are true:
@@ -91,9 +138,10 @@ Until then, use documented upstream references and local adapters.
 
 Before adding or changing a dependency:
 
-- [ ] Is this hard, soft, reference, tool, or plugin dependency?
+- [ ] Is this hard, soft, reference, tool, MCP, or plugin dependency?
 - [ ] Is the dependency declared in the narrowest useful place?
 - [ ] Does the skill have preflight/fallback/stop behavior?
+- [ ] If MCP is involved, is distribution mode, transport, auth storage, tool scope, live-discovery test, fallback, and stop condition explicit?
 - [ ] Are secrets excluded from docs and examples?
 - [ ] Are we copying upstream text? If yes, is the compatibility gap and ownership recorded?
 - [ ] Are README, bucket README, plugin manifest, and validators still in sync?
