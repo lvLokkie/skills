@@ -31,7 +31,7 @@ Promote a draft only when it passes the same bar as any published skill:
 3. Remove draft-only caveats or convert them into explicit preflight/fallback/stop behavior.
 4. Update the destination category `skills/README.md`, `plugins/<category>/.claude-plugin/plugin.json`, the top-level README, and dependency docs when needed.
 5. Bump only the destination category plugin version for shipped behavior changes.
-6. Run `skill-audit`, `python scripts/validate.py`, `git diff --check`, JSON parsing, plugin validation for the destination category, and the security gate.
+6. Run `/skill-management:skill-audit`, `python scripts/validate.py`, `git diff --check`, JSON parsing, plugin validation for the destination category, and the security gate.
 
 ## External `in-progress/*` dependencies
 

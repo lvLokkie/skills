@@ -46,6 +46,19 @@ def load_json(path: Path) -> dict[str, Any]:
     return data
 
 
+def require_text(path: Path, text: str, needle: str, label: str) -> None:
+    if needle not in text:
+        fail(f"{path.relative_to(ROOT)} missing {label}: {needle}")
+
+
+def top_skill_link(plugin_name: str, skill_name: str) -> str:
+    return f"[{skill_name}](./plugins/{plugin_name}/skills/{skill_name}/SKILL.md)"
+
+
+def bucket_skill_link(skill_name: str) -> str:
+    return f"[{skill_name}](./{skill_name}/SKILL.md)"
+
+
 def validate_optional_mcp(plugin_root: Path) -> None:
     mcp_path = plugin_root / ".mcp.json"
     if not mcp_path.exists():
@@ -77,7 +90,7 @@ def validate_optional_mcp(plugin_root: Path) -> None:
                 fail(f"{mcp_path.relative_to(ROOT)}: MCP server {server_name!r} Authorization header must use an env placeholder")
 
 
-def validate_plugin(plugin_entry: object, top_readme: str) -> tuple[str, int]:
+def validate_plugin(plugin_entry: object, top_readme: str, marketplace_name: str) -> tuple[str, int]:
     if not isinstance(plugin_entry, dict):
         fail("marketplace plugin entry must be an object")
     raw_name = plugin_entry.get("name")
@@ -116,8 +129,10 @@ def validate_plugin(plugin_entry: object, top_readme: str) -> tuple[str, int]:
         fail(f"{skills_dir.relative_to(ROOT)}: missing README.md")
     bucket_text = bucket_readme.read_text(encoding="utf-8")
 
-    if name not in top_readme:
-        fail(f"README.md does not mention marketplace plugin {name}")
+    category_heading = f"### `{name}`"
+    install_command = f"/plugin install {name}@{marketplace_name}"
+    require_text(README, top_readme, category_heading, f"promoted category heading for {name}")
+    require_text(README, top_readme, install_command, f"install command for plugin {name}")
 
     seen: set[str] = set()
     for rel in skills:
@@ -147,10 +162,9 @@ def validate_plugin(plugin_entry: object, top_readme: str) -> tuple[str, int]:
         fail(f"{skills_dir.relative_to(ROOT)}: skill folders not listed in plugin.json: {', '.join(sorted(extra))}")
 
     for skill_name in sorted(seen):
-        if skill_name not in bucket_text:
-            fail(f"{bucket_readme.relative_to(ROOT)} does not mention promoted skill {skill_name}")
-        if skill_name not in top_readme:
-            fail(f"README.md does not mention promoted skill {skill_name}")
+        require_text(bucket_readme, bucket_text, bucket_skill_link(skill_name), f"bucket README link for skill {skill_name}")
+        require_text(README, top_readme, top_skill_link(name, skill_name), f"top-level README link for skill {name}/{skill_name}")
+        require_text(README, top_readme, f"/{name}:{skill_name}", f"run command for skill {name}/{skill_name}")
 
     return name, len(seen)
 
@@ -196,11 +210,15 @@ def main() -> None:
     if not isinstance(plugins, list) or not plugins:
         fail("marketplace.json must list at least one plugin")
 
+    marketplace_name = marketplace.get("name")
+    if not isinstance(marketplace_name, str) or not marketplace_name:
+        fail("marketplace.json missing name")
+
     top_readme = README.read_text(encoding="utf-8")
     total_skills = 0
     names: set[str] = set()
     for plugin_entry in plugins:
-        plugin_name, skill_count = validate_plugin(plugin_entry, top_readme)
+        plugin_name, skill_count = validate_plugin(plugin_entry, top_readme, marketplace_name)
         if plugin_name in names:
             fail(f"marketplace.json lists duplicate plugin {plugin_name}")
         names.add(plugin_name)

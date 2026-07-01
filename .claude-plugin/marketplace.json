@@ -11,6 +11,11 @@
       "description": "General-purpose agent skills that do not belong to a narrower domain category."
     },
     {
+      "name": "skill-management",
+      "source": "./plugins/skill-management",
+      "description": "Skills for managing this marketplace's skill lifecycle, category plugins, package indexes, dependency gates, and publish audits."
+    },
+    {
       "name": "marketing",
       "source": "./plugins/marketing",
       "description": "Marketing and paid-acquisition operations skills for campaign setup, audit, reporting, lead routing, Avito feed checks, and MCP-assisted optimization."

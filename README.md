@@ -11,6 +11,7 @@ Claude Code marketplace install:
 ```text
 /plugin marketplace add lvLokkie/skills
 /plugin install general@lvlokkie-skills-marketplace
+/plugin install skill-management@lvlokkie-skills-marketplace
 /plugin install marketing@lvlokkie-skills-marketplace
 ```
 
@@ -19,8 +20,10 @@ The `marketing` plugin includes an optional LidFly MCP config with a `${LIDFLY_A
 Run promoted skills:
 
 ```text
-/general:skill-audit
 /general:report-writing
+/skill-management:skill-audit
+/skill-management:skill-authoring
+/skill-management:skill-category-management
 /marketing:lidfly-mcp
 /marketing:ad-campaign-operations
 /marketing:avito-ads-feed
@@ -50,8 +53,17 @@ Draft skills that are not ready for users live in the lifecycle category describ
 
 | Skill | Purpose |
 |---|---|
-| [skill-audit](./plugins/general/skills/skill-audit/SKILL.md) | Audit local skill/package changes and external skill candidates against `writing-great-skills`, Ivan packaging gates, and industrial security checks before publishing or importing. |
 | [report-writing](./plugins/general/skills/report-writing/SKILL.md) | Write evidence-backed reports, briefs, and decision memos with sources, confidence labels, conclusions, and next actions. |
+
+### `skill-management`
+
+#### Model-invoked
+
+| Skill | Purpose |
+|---|---|
+| [skill-audit](./plugins/skill-management/skills/skill-audit/SKILL.md) | Audit local skill/package changes and external skill candidates against `writing-great-skills`, Ivan packaging gates, and industrial security checks before publishing or importing. |
+| [skill-authoring](./plugins/skill-management/skills/skill-authoring/SKILL.md) | Create, update, promote, move, or retire marketplace skills while keeping source files, invocation class, manifests, README catalogs, dependencies, versions, and validation in sync. |
+| [skill-category-management](./plugins/skill-management/skills/skill-category-management/SKILL.md) | Create, update, rename, split, merge, or remove marketplace category plugins with manifests, catalogs, install examples, versions, validation, and migration notes aligned. |
 
 ### `marketing`
 
@@ -82,40 +94,22 @@ None yet. Prefer direct upstream dependencies for generic command skills like `h
 | `docs/mattpocock-dependency-candidates.md` | Reference analysis and shortlist of upstream skills to depend on or adapt. |
 | `AGENTS.md` | Working rules for agents editing this repo. |
 
-## Add or revise a skill
+## Manage skills and categories
 
-1. Create or edit `plugins/<category>/skills/<name>/SKILL.md`, or use `plugins/in-progress/skills/<name>/SKILL.md` when the skill is still a draft that must not be installed by users.
-2. Decide invocation class:
-   - model-invoked: rich trigger phrasing in `description`;
-   - user-invoked: add `disable-model-invocation: true` and use a human-facing one-line description.
-3. Add heavy references as sibling `.md` files, not into the top of `SKILL.md`.
-4. Update:
-   - `plugins/<category>/skills/README.md`
-   - `plugins/<category>/.claude-plugin/plugin.json`
-   - `.claude-plugin/marketplace.json` when adding/removing a category
-   - this README's promoted-skill table
-5. Run validation:
+Skill/category operations are packaged as skills, not kept as README-only procedure:
+
+- Use [`skill-authoring`](./plugins/skill-management/skills/skill-authoring/SKILL.md) to create, update, promote, move, or retire a skill.
+- Use [`skill-category-management`](./plugins/skill-management/skills/skill-category-management/SKILL.md) to create, update, rename, split, merge, or remove category plugins.
+- Use [`skill-audit`](./plugins/skill-management/skills/skill-audit/SKILL.md) as the publish/import/security gate for every skill, category, dependency, README, manifest, MCP, or packaging change.
+
+Minimum verification remains:
 
 ```bash
 python scripts/validate.py
+git diff --check
 ```
 
-6. Bump the owning `plugins/<category>/.claude-plugin/plugin.json` version on behavior changes.
-
-## Add or revise a skill category
-
-A category is a marketplace plugin under `plugins/<category>/`. Use categories for durable domains, not one-off projects.
-
-Exception: `plugins/in-progress` is a non-published lifecycle category for drafts. Do not register it in `.claude-plugin/marketplace.json`; promote drafts by moving them into a real category and passing the promotion gate in [docs/lifecycle.md](./docs/lifecycle.md).
-
-1. Create or edit:
-   - `plugins/<category>/.claude-plugin/plugin.json`
-   - `plugins/<category>/skills/README.md`
-   - one or more real `plugins/<category>/skills/<name>/SKILL.md` files
-2. Register or update the category in `.claude-plugin/marketplace.json`.
-3. Update this README with install/run examples and promoted skills.
-4. Run `skill-audit` category CRUD gates: create/read/update/delete/move, packaging, dependency policy, and security scan.
-5. Run `python scripts/validate.py`, `git diff --check`, JSON parse, and plugin validation when available.
+Also parse changed JSON manifests and run `claude plugin validate .` plus `claude plugin validate plugins/<changed-category>` when Claude CLI is available.
 
 ## Dependency policy
 

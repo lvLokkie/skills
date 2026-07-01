@@ -43,4 +43,4 @@ Before shipping changes to this category:
 
 1. Check that each promoted skill is listed in `.claude-plugin/plugin.json`, this README, and the top-level README.
 2. Parse `.mcp.json` and confirm it contains only placeholders, not secrets.
-3. Run `python scripts/validate.py`, `git diff --check`, `claude plugin validate plugins/marketing`, and the `skill-audit` security gate.
+3. Run `python scripts/validate.py`, `git diff --check`, `claude plugin validate plugins/marketing`, and the `/skill-management:skill-audit` security gate.

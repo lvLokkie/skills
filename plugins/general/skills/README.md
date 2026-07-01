@@ -6,7 +6,6 @@ Promoted skills shipped by the `general` plugin. Keep this list in sync with `.c
 
 Model- or user-reachable. Descriptions use trigger phrasing so an agent can load the skill autonomously.
 
-- **[skill-audit](./skill-audit/SKILL.md)** — Audit local skill/package changes and external skill candidates against `writing-great-skills`, Ivan packaging gates, and industrial security checks before publishing or importing.
 - **[report-writing](./report-writing/SKILL.md)** — Write evidence-backed reports, briefs, and decision memos with sources, confidence labels, conclusions, and next actions.
 
 ## User-invoked

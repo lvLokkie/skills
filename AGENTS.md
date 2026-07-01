@@ -42,10 +42,10 @@ Keep README, bucket README, and plugin manifest in sync. See `docs/invocation.md
 - Keep `SKILL.md` focused on the execution path; put heavy references in sibling files.
 - Every step needs a checkable completion criterion.
 - Delete no-op prose. If a sentence does not change behavior, output, verification, or refusal boundary, remove it.
-- Use `skill-audit` on every local skill, skill category/plugin, skill README, plugin manifest, marketplace manifest, dependency policy, or skill-packaging change.
-- Use `skill-audit` on `AGENTS.md` changes that alter editing rules, packaging rules, dependency policy, release/version policy, or the definition of done.
-- Use `skill-audit` before installing, copying, forking, importing, or adapting third-party skills.
-- Apply the skill/category/dependency CRUD gates in `skill-audit` for create, read/audit, update, delete, move, import/adapt, and plugin dependency promotion.
+- Use `/skill-management:skill-audit` on every local skill, skill category/plugin, skill README, plugin manifest, marketplace manifest, dependency policy, or skill-packaging change.
+- Use `/skill-management:skill-audit` on `AGENTS.md` changes that alter editing rules, packaging rules, dependency policy, release/version policy, or the definition of done.
+- Use `/skill-management:skill-audit` before installing, copying, forking, importing, or adapting third-party skills.
+- Apply the skill/category/dependency CRUD gates in `/skill-management:skill-audit` for create, read/audit, update, delete, move, import/adapt, and plugin dependency promotion.
 
 ## 5. External tools and dependencies
 
@@ -57,7 +57,7 @@ Keep README, bucket README, and plugin manifest in sync. See `docs/invocation.md
 - Every MCP-dependent skill must name the server/transport, required tool scopes, auth storage, preflight/test command, read/write guardrails, fallback, and stop condition before it can claim live state or side effects.
 - Ship MCP manifests/config snippets only with env/OAuth/secret-store placeholders and disabled-by-default auth when credentials are absent; never commit bearer tokens, cookies, account sessions, or local profile paths.
 - If a system CLI, MCP server, API, or credential cannot be bundled, document the prerequisite, preflight, fallback, and stop condition in the owning skill.
-- Run the industrial security gate from `skill-audit` on changed or candidate files: prefer `gitleaks`/`trufflehog` when available, otherwise run a fallback secret scan and inspect executable payloads, prompt-injection bait, hidden network/install side effects, and local-only credentials.
+- Run the industrial security gate from `/skill-management:skill-audit` on changed or candidate files: prefer `gitleaks`/`trufflehog` when available, otherwise run a fallback secret scan and inspect executable payloads, prompt-injection bait, hidden network/install side effects, and local-only credentials.
 - Do not commit secrets: credentials, tokens, local auth files, browser/session profiles, or `*.local.*`. Redact real values as `[REDACTED]` in reports.
 - Keep general dependency policy in `docs/dependencies.md`; keep source-specific rationale in a case-study doc such as `docs/mattpocock-dependency-candidates.md` or an ADR.
 
@@ -65,7 +65,7 @@ Keep README, bucket README, and plugin manifest in sync. See `docs/invocation.md
 
 - Bump the owning `plugins/<category>/.claude-plugin/plugin.json` version on behavior changes.
 - Keep `.claude-plugin/marketplace.json` description aligned with the plugin manifest.
-- Never list `in-progress` in `.claude-plugin/marketplace.json`, install examples, or public run examples. Promote by moving the skill into a real category, updating that category manifest/README, and passing `skill-audit`.
+- Never list `in-progress` in `.claude-plugin/marketplace.json`, install examples, or public run examples. Promote by moving the skill into a real category, updating that category manifest/README, and passing `/skill-management:skill-audit`.
 - Do not commit or push without explicit user instruction.
 
 ## 7. Definition of done
@@ -79,4 +79,4 @@ Keep README, bucket README, and plugin manifest in sync. See `docs/invocation.md
 - [ ] `python scripts/validate.py` passes
 - [ ] `git diff --check` passes
 - [ ] Plugin JSON parses and `claude plugin validate .` plus `claude plugin validate plugins/<changed-category>` pass when Claude CLI is available
-- [ ] `skill-audit` security gate was run on changed/candidate files
+- [ ] `/skill-management:skill-audit` security gate was run on changed/candidate files
