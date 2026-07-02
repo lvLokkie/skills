@@ -10,4 +10,6 @@ Model- or user-reachable. Descriptions use trigger phrasing so an agent can load
 
 ## User-invoked
 
-Reachable only when a human explicitly invokes the skill. None yet.
+Reachable only when a human explicitly invokes the skill.
+
+- **[make-me-rich](./make-me-rich/SKILL.md)** — Plan a task on the expensive model while cheaper sub-agents do bounded read-only analysis, then write an executable plan for cheaper executors.

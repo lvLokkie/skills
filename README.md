@@ -21,6 +21,7 @@ Run promoted skills:
 
 ```text
 /general:report-writing
+/general:make-me-rich
 /skill-management:skill-audit
 /skill-management:skill-authoring
 /skill-management:skill-category-management
@@ -54,6 +55,12 @@ Draft skills that are not ready for users live in the lifecycle category describ
 | Skill | Purpose |
 |---|---|
 | [report-writing](./plugins/general/skills/report-writing/SKILL.md) | Write evidence-backed reports, briefs, and decision memos with sources, confidence labels, conclusions, and next actions. |
+
+#### User-invoked
+
+| Skill | Purpose |
+|---|---|
+| [make-me-rich](./plugins/general/skills/make-me-rich/SKILL.md) | Plan a task on the expensive model while cheaper sub-agents do bounded read-only analysis, then write an executable plan for cheaper executors. |
 
 ### `skill-management`
 
