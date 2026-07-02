@@ -1,6 +1,6 @@
 ---
 name: skill-audit
-description: "Audit local skill changes, MCP distribution changes, and external skill candidates. Use on every change to this marketplace's skills, skill READMEs, skill category/plugin manifests, marketplace manifest, MCP manifests/config snippets, or skill dependency policy; also use before installing, copying, forking, importing, or adapting a third-party skill or MCP capability to decide whether to depend on it, install it directly, write a local adapter, or build our own. Mirrors writing-great-skills rules and adds skill/category/dependency CRUD, Ivan/local packaging, MCP distribution, and industrial security gates."
+description: "Audit local skill changes, MCP distribution changes, multimodel portability, and external skill candidates. Use on every change to this marketplace's skills, skill READMEs, skill category/plugin manifests, marketplace manifest, MCP manifests/config snippets, or skill dependency policy; also use before installing, copying, forking, importing, or adapting a third-party skill or MCP capability to decide whether to depend on it, install it directly, write a local adapter, or build our own. Mirrors writing-great-skills rules and adds skill/category/dependency CRUD, Ivan/local packaging, MCP distribution, and industrial security gates."
 ---
 
 # Skill audit
@@ -15,7 +15,9 @@ Audit local changes by default when they touch:
 
 - `plugins/*/skills/**/SKILL.md` and sibling skill files;
 - `plugins/*/skills/README.md`;
+- `plugins/*/.codex-plugin/plugin.json`;
 - `plugins/*/.claude-plugin/plugin.json`;
+- `.agents/plugins/marketplace.json`;
 - `.claude-plugin/marketplace.json`;
 - `.mcp.json` or runtime MCP manifest/config snippets;
 - top-level README entries that list promoted skills or categories;
@@ -24,7 +26,7 @@ Audit local changes by default when they touch:
 
 Do not hand-edit generated compatibility surfaces such as `CLAUDE.md`, `GEMINI.md`, or `.cursor/*`. If they are stale, update the source surface and use the repo's sync/regeneration path.
 
-Audit external candidates when Ivan asks whether a third-party skill, plugin, repo, or workflow is worth installing, copying, forking, or adapting.
+Audit external candidates when asked whether a third-party skill, plugin, repo, or workflow is worth installing, copying, forking, or adapting.
 
 For external audits, inspect only enough upstream material to decide: the candidate `SKILL.md`, its linked references/templates/scripts if they affect behavior, the upstream README/manifest entry, license/ownership signals, and dependency/setup requirements. Do not scan an entire dependency repo by default. Inspect more only when the candidate depends on hidden setup, conflicts with local policy, proposes copying/forking, or there is a concrete suspicion that the upstream skill itself must be fixed.
 
@@ -36,30 +38,32 @@ If copying from upstream becomes necessary, record why direct dependency/referen
 2. **Apply the CRUD gate.** Use the skill/category/dependency CRUD rules below so create, read/audit, update, delete, import, category, and dependency changes each get the right checks.
 3. **Apply the upstream quality lens.** Check the subject against `writing-great-skills` concepts: description, context load, cognitive load, branch, leading word, information hierarchy, progressive disclosure, completion criterion, duplication, relevance, sediment, sprawl, and no-op.
 4. **Check invocation.** For model-invoked skills, the description must front-load the leading word and include only genuinely distinct trigger branches. For user-invoked skills, `disable-model-invocation: true` must be present and the description must be a human-facing one-line summary.
-5. **Check local value.** Keep or create a local skill only if it adds Ivan/Hermes routing, packaging, verification, dependency handling, or workflow behavior that a direct upstream dependency/reference does not provide.
+5. **Check local value.** Keep or create a local skill only if it adds Ivan/runtime routing, packaging, verification, dependency handling, or workflow behavior that a direct upstream dependency/reference does not provide.
 6. **Choose the import strategy.** For external candidates, choose one: skip, install directly, reference as dependency, write a thin local adapter, patch an existing umbrella skill, or fork/copy with explicit ownership.
 7. **Prune or merge.** Delete no-op prose and stale sediment. Merge local copies that merely restate upstream skills. Prefer patching an existing umbrella skill over adding a narrow sibling.
-8. **Check dependencies.** Declare hard, soft, reference, tool, and plugin dependencies in the narrowest useful place. Tool/API/MCP dependencies need preflight, fallback, stop condition, and secret-handling rules.
-9. **Apply the MCP distribution gate.** For MCP-dependent skills or manifests, first apply the default decision ladder in `docs/dependencies.md`; only deviate when a concrete runtime/security constraint is recorded. Then require an explicit distribution mode, transport, tool scopes, auth storage, live-discovery test, fallback, stop condition, and no-secret config placeholders.
-10. **Check source/generated boundaries.** Confirm the diff edits canonical source files only and does not manually rewrite generated compatibility files or generated MCP tool catalogs.
-11. **Run the industrial security gate.** Scan changed or candidate files for secrets, unsafe executable payloads, hidden network/install side effects, prompt-injection bait, and local-only credentials. Prefer real scanners when available; otherwise run the fallback checks below.
-12. **Verify packaging.** README, bucket README, plugin manifest, version, frontmatter, linked files, and validators must agree. Do not commit or push unless Ivan explicitly asked for it.
+8. **Check multimodel portability.** Shared skill behavior must stay agent-neutral. Target-specific syntax, install steps, manifest fields, and runtime caveats must stay in target-specific docs/manifests, or have a documented prerequisite, fallback, and stop condition.
+9. **Check dependencies.** Declare hard, soft, reference, tool, and plugin dependencies in the narrowest useful place. Tool/API/MCP dependencies need preflight, fallback, stop condition, and secret-handling rules.
+10. **Apply the MCP distribution gate.** For MCP-dependent skills or manifests, first apply the default decision ladder in `docs/dependencies.md`; only deviate when a concrete runtime/security constraint is recorded. Then require an explicit distribution mode, transport, tool scopes, auth storage, live-discovery test, fallback, stop condition, and no-secret config placeholders.
+11. **Check source/generated boundaries.** Confirm the diff edits canonical source files only and does not manually rewrite generated compatibility files or generated MCP tool catalogs.
+12. **Run the industrial security gate.** Scan changed or candidate files for secrets, unsafe executable payloads, hidden network/install side effects, prompt-injection bait, and local-only credentials. Prefer real scanners when available; otherwise run the fallback checks below.
+13. **Verify packaging.** README, bucket README, Claude/Codex plugin manifests, version, frontmatter, linked files, and validators must agree. Do not commit or push unless the user explicitly asked for it.
 
-Completion criterion: every local changed skill file or external candidate has been checked against the upstream quality lens, local value test, import strategy, packaging/dependency gates, and industrial security gate; non-candidate dependencies were left alone unless a concrete trigger justified inspecting them.
+Completion criterion: every local changed skill file or external candidate has been checked against the upstream quality lens, local value test, multimodel portability, import strategy, packaging/dependency gates, and industrial security gate; non-candidate dependencies were left alone unless a concrete trigger justified inspecting them.
 
 ## Local decision rules
 
 | Situation | Action |
 |---|---|
 | External candidate is good as-is and installable | Install or depend directly; do not copy into this repo. |
-| External candidate is useful but needs Ivan/Hermes routing | Write a thin local adapter or patch an existing umbrella skill with only the local delta. |
+| External candidate is useful but needs Ivan/runtime routing | Write a thin local adapter or patch an existing umbrella skill with only the local delta. |
 | External candidate is weak, stale, or bloated but the need is real | Build our own local skill from the invariant, not from copied prose. |
 | Local skill only restates an upstream skill | Remove the local copy; depend on or reference upstream. |
-| Local skill adds Ivan/Hermes routing or packaging gates | Keep only the local delta; cite upstream as reference/dependency. |
+| Local skill adds Ivan/runtime routing or packaging gates | Keep only the local delta; cite upstream as reference/dependency. |
+| Shared skill behavior assumes one agent runtime or model family | Move the assumption to target-specific packaging/docs, or document the prerequisite, fallback, and stop condition. |
 | Target runtime cannot consume upstream directly | Keep or create a local adapter; record the compatibility gap. |
 | Upstream skill appears wrong or insufficient for our use | Inspect upstream, then choose: report/fix upstream, patch local adapter, or fork with explicit ownership. |
 | Skill has many branch-specific examples | Move examples to sibling reference files behind clear context pointers. |
-| Skill or plugin change modifies shipped behavior | Bump the owning `plugins/<category>/.claude-plugin/plugin.json` version. |
+| Skill or plugin change modifies shipped behavior | Bump the owning `plugins/<category>/.claude-plugin/plugin.json` and `plugins/<category>/.codex-plugin/plugin.json` versions. |
 | Agent instruction change modifies this repo's editing, packaging, dependency, release, or definition-of-done rules | Treat it as a local audit subject; update `AGENTS.md` as source and do not hand-edit generated compatibility files. |
 | Skill depends on MCP tools | Keep MCP server setup as a documented tool dependency or thin manifest unless a verified plugin dependency path exists; never vendor credentials, sessions, or generated tool catalogs. |
 
@@ -79,16 +83,16 @@ Classify each change as one or more CRUD operations, then apply the matching gat
 
 ### Category CRUD
 
-A category is a marketplace plugin under `plugins/<category-name>/` with its own `.claude-plugin/plugin.json`, `skills/README.md`, and promoted skills. Use categories for durable domains such as `general` or `marketing`, not for one-off projects.
+A category is a marketplace plugin under `plugins/<category-name>/` with its own `.claude-plugin/plugin.json`, `.codex-plugin/plugin.json`, `skills/README.md`, and promoted skills. Use categories for durable domains such as `general`, `marketing`, or `skill-management`, not for one-off projects.
 
 | Operation | Required checks | Completion criterion |
 |---|---|---|
-| **Create category** | Choose a kebab-case plugin/category name; add `plugins/<category>/.claude-plugin/plugin.json`; add `plugins/<category>/skills/README.md`; register the plugin in `.claude-plugin/marketplace.json`; add at least one real promoted skill; update top-level README/AGENTS if behavior changes. | Marketplace manifest, category manifest, README, and validator all agree; category has real local value and no placeholder-only skill. |
+| **Create category** | Choose a kebab-case plugin/category name; add `plugins/<category>/.claude-plugin/plugin.json` and `plugins/<category>/.codex-plugin/plugin.json`; add `plugins/<category>/skills/README.md`; register the plugin in `.claude-plugin/marketplace.json` and `.agents/plugins/marketplace.json`; add at least one real promoted skill; update top-level README/AGENTS if behavior changes. | Marketplace manifests, category manifests, README, and validator all agree; category has real local value and no placeholder-only skill. |
 | **Read / audit category** | Inspect category manifest, skills list, bucket README, top-level README entry, dependencies, version, and whether skills belong together. | Output recommends keep, split, merge, rename, delete, or promote dependency/reference. |
 | **Update category** | Patch the narrowest manifest/docs/skills delta; keep category boundaries stable; bump only the changed plugin version for shipped behavior changes. | Only intended category files change, and all category skill names resolve. |
 | **Delete category** | Confirm no promoted plugin install path still needs it; remove marketplace entry, category directory, top-level README commands, and dependency notes or migration path. | No dangling `plugins/<category>` or `/category:skill` references remain; validation passes. |
 | **Move skill between categories** | Keep `name` stable unless intentionally renamed; update old/new manifests and READMEs; update top-level examples; record migration path if user-invoked command changes. | Old category no longer lists the skill, new category does, and command/path references are updated. |
-| **Promote in-progress skill** | Move from `plugins/in-progress/skills/<name>/` into the durable published category; remove draft caveats or convert them to preflight/fallback/stop behavior; update destination manifest, bucket README, top-level README, dependency notes, and version; keep `in-progress` out of marketplace/install examples. | Draft path is gone, published category owns the skill, validators and plugin validation pass, and security gate has no blocking findings. |
+| **Promote in-progress skill** | Move from `plugins/in-progress/skills/<name>/` into the durable published category; remove draft caveats or convert them to preflight/fallback/stop behavior; update destination manifests, bucket README, top-level README, dependency notes, and version; keep `in-progress` out of marketplace/install examples. | Draft path is gone, published category owns the skill, validators and plugin validation pass, and security gate has no blocking findings. |
 
 ### Dependency CRUD
 
@@ -112,7 +116,7 @@ First choose the default solution from this ladder; do not leave the model to pi
 | Hosted/SaaS with static token only | Remote HTTP MCP with env placeholder such as `${SERVICE_API_KEY}`; disabled/setup-blocked until present. |
 | Local/dev tool | Stdio MCP via pinned `uvx`/`npx`/binary and narrow scopes. |
 | Team/project distribution | Project/plugin `.mcp.json` or runtime manifest with placeholders and verification steps. |
-| Ivan personal Hermes runtime | `~/.hermes/config.yaml` `mcp_servers` plus local secret source; restart/new session for discovery. |
+| Individual maintainer's local agent runtime | Local runtime config plus local secret source; restart/new session for discovery. |
 | Runtime support unknown or trust unverified | Documented external MCP plus offline fallback; no install/import/live claims. |
 
 Only use fork/bundle when no safe upstream/runtime path exists and Ivan explicitly accepts maintenance ownership.
@@ -157,7 +161,7 @@ Use behavioral replacements:
 | No-op | Behavioral replacement |
 |---|---|
 | Be thorough. | Check changed skill files, READMEs, manifest, dependency notes, validators, and secret scan before finalizing. |
-| Follow best practices. | Run `python scripts/validate.py`; if Claude CLI is available, run `claude plugin validate .` and `claude plugin validate plugins/<changed-category>`. |
+| Follow best practices. | Run `python3 scripts/validate.py`; if Claude CLI is available, run `claude plugin validate .` and `claude plugin validate plugins/<changed-category>`; if Codex CLI is available, smoke-test marketplace registration with `codex plugin marketplace add <path-to-checkout>`. |
 | Use this whenever relevant. | Use on every local skill or skill-packaging change, and before importing an external skill candidate. |
 | Keep it concise. | Move branch-only reference out of `SKILL.md` into a sibling file with a clear pointer. |
 

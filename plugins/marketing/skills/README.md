@@ -1,6 +1,6 @@
 # Marketing Skills
 
-Promoted skills shipped by the `marketing` plugin. Keep this list in sync with `.claude-plugin/plugin.json`, optional `.mcp.json`, the top-level README, and `docs/dependencies.md`.
+Promoted skills shipped by the `marketing` plugin. Keep this list in sync with `.claude-plugin/plugin.json`, `.codex-plugin/plugin.json`, optional `.mcp.json`, the top-level README, and `docs/dependencies.md`.
 
 ## Category contract
 
@@ -41,6 +41,6 @@ None yet.
 
 Before shipping changes to this category:
 
-1. Check that each promoted skill is listed in `.claude-plugin/plugin.json`, this README, and the top-level README.
+1. Check that each promoted skill is listed in `.claude-plugin/plugin.json`, `.codex-plugin/plugin.json`, this README, and the top-level README.
 2. Parse `.mcp.json` and confirm it contains only placeholders, not secrets.
-3. Run `python scripts/validate.py`, `git diff --check`, `claude plugin validate plugins/marketing`, and the `/skill-management:skill-audit` security gate.
+3. Run `python3 scripts/validate.py`, `git diff --check`, `claude plugin validate plugins/marketing` when Claude CLI is available, `codex plugin marketplace add <path-to-checkout>` when Codex CLI is available, and the `/skill-management:skill-audit` security gate.

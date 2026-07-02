@@ -1,0 +1,32 @@
+{
+  "name": "marketing",
+  "version": "0.4.0",
+  "description": "Marketing and paid-acquisition operations skills for campaign setup, audit, reporting, lead routing, Avito feed checks, and MCP-assisted optimization.",
+  "author": {
+    "name": "Ivan Ryazanov"
+  },
+  "repository": "https://github.com/lvLokkie/skills",
+  "keywords": [
+    "agent-skills",
+    "lvlokkie",
+    "marketing"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Ivan Marketing Skills",
+    "shortDescription": "Marketing and paid-acquisition operations",
+    "longDescription": "Portable marketing workflows for MCP-assisted campaign operations, Avito feed checks, lead routing, and paid-acquisition reporting.",
+    "developerName": "Ivan Ryazanov",
+    "category": "Marketing",
+    "capabilities": [
+      "Interactive"
+    ],
+    "defaultPrompt": [
+      "Audit an ad campaign",
+      "Check a lead-routing flow",
+      "Prepare an Avito ads feed"
+    ],
+    "brandColor": "#7C3AED",
+    "screenshots": []
+  }
+}

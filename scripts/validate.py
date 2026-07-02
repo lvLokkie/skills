@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the skills marketplace manifest, plugin manifests, and skill frontmatter."""
+"""Validate the skills marketplace manifests, plugin manifests, and skill frontmatter."""
 from __future__ import annotations
 
 import json
@@ -8,8 +8,12 @@ from pathlib import Path
 from typing import Any, NoReturn
 
 ROOT = Path(__file__).resolve().parents[1]
-MARKETPLACE = ROOT / ".claude-plugin" / "marketplace.json"
+CLAUDE_MARKETPLACE = ROOT / ".claude-plugin" / "marketplace.json"
+CODEX_MARKETPLACE = ROOT / ".agents" / "plugins" / "marketplace.json"
 README = ROOT / "README.md"
+AGENTS = ROOT / "AGENTS.md"
+INVOCATION_DOC = ROOT / "docs" / "invocation.md"
+SKILL_AUDIT = ROOT / "plugins" / "skill-management" / "skills" / "skill-audit" / "SKILL.md"
 IN_PROGRESS = ROOT / "plugins" / "in-progress"
 
 
@@ -90,32 +94,35 @@ def validate_optional_mcp(plugin_root: Path) -> None:
                 fail(f"{mcp_path.relative_to(ROOT)}: MCP server {server_name!r} Authorization header must use an env placeholder")
 
 
-def validate_plugin(plugin_entry: object, top_readme: str, marketplace_name: str) -> tuple[str, int]:
+def validate_claude_plugin(plugin_entry: object, top_readme: str, marketplace_name: str) -> tuple[str, str, set[str]]:
     if not isinstance(plugin_entry, dict):
-        fail("marketplace plugin entry must be an object")
+        fail("Claude marketplace plugin entry must be an object")
     raw_name = plugin_entry.get("name")
     raw_source = plugin_entry.get("source")
     if not isinstance(raw_name, str) or not raw_name:
-        fail("marketplace plugin entry missing name")
+        fail("Claude marketplace plugin entry missing name")
     name = raw_name
     if not isinstance(raw_source, str) or not raw_source:
-        fail(f"marketplace plugin {name}: missing source")
+        fail(f"Claude marketplace plugin {name}: missing source")
     source = raw_source
 
     plugin_root = (ROOT / source).resolve()
     try:
         plugin_root.relative_to(ROOT.resolve())
     except ValueError:
-        fail(f"marketplace plugin {name}: source escapes repo root: {source}")
+        fail(f"Claude marketplace plugin {name}: source escapes repo root: {source}")
     if not plugin_root.is_dir():
-        fail(f"marketplace plugin {name}: source directory missing: {source}")
+        fail(f"Claude marketplace plugin {name}: source directory missing: {source}")
 
     manifest_path = plugin_root / ".claude-plugin" / "plugin.json"
     if not manifest_path.exists():
-        fail(f"marketplace plugin {name}: missing .claude-plugin/plugin.json")
+        fail(f"Claude marketplace plugin {name}: missing .claude-plugin/plugin.json")
     manifest = load_json(manifest_path)
     if manifest.get("name") != name:
         fail(f"{manifest_path.relative_to(ROOT)}: manifest name must match marketplace entry {name!r}")
+    version = manifest.get("version")
+    if not isinstance(version, str) or not version:
+        fail(f"{manifest_path.relative_to(ROOT)}: version is required")
 
     validate_optional_mcp(plugin_root)
 
@@ -166,7 +173,106 @@ def validate_plugin(plugin_entry: object, top_readme: str, marketplace_name: str
         require_text(README, top_readme, top_skill_link(name, skill_name), f"top-level README link for skill {name}/{skill_name}")
         require_text(README, top_readme, f"/{name}:{skill_name}", f"run command for skill {name}/{skill_name}")
 
-    return name, len(seen)
+    return name, version, seen
+
+
+def validate_codex_plugin(
+    plugin_entry: object,
+    top_readme: str,
+    expected_skills: dict[str, set[str]],
+    expected_versions: dict[str, str],
+) -> str:
+    if not isinstance(plugin_entry, dict):
+        fail("Codex marketplace plugin entry must be an object")
+
+    raw_name = plugin_entry.get("name")
+    if not isinstance(raw_name, str) or not raw_name:
+        fail("Codex marketplace plugin entry missing name")
+    name = raw_name
+
+    if name not in expected_skills:
+        fail(f"Codex marketplace lists unknown plugin {name!r}")
+
+    raw_source = plugin_entry.get("source")
+    if not isinstance(raw_source, dict):
+        fail(f"Codex marketplace plugin {name}: source must be an object")
+    if raw_source.get("source") != "local":
+        fail(f"Codex marketplace plugin {name}: source.source must be 'local'")
+    raw_path = raw_source.get("path")
+    if not isinstance(raw_path, str) or not raw_path:
+        fail(f"Codex marketplace plugin {name}: source.path is required")
+
+    plugin_root = (ROOT / raw_path).resolve()
+    try:
+        plugin_root.relative_to(ROOT.resolve())
+    except ValueError:
+        fail(f"Codex marketplace plugin {name}: source path escapes repo root: {raw_path}")
+    if not plugin_root.is_dir():
+        fail(f"Codex marketplace plugin {name}: source directory missing: {raw_path}")
+
+    policy = plugin_entry.get("policy")
+    if not isinstance(policy, dict):
+        fail(f"Codex marketplace plugin {name}: policy must be an object")
+    if policy.get("installation") not in {"NOT_AVAILABLE", "AVAILABLE", "INSTALLED_BY_DEFAULT"}:
+        fail(f"Codex marketplace plugin {name}: invalid policy.installation")
+    if policy.get("authentication") not in {"ON_INSTALL", "ON_USE"}:
+        fail(f"Codex marketplace plugin {name}: invalid policy.authentication")
+    if not isinstance(plugin_entry.get("category"), str) or not plugin_entry.get("category"):
+        fail(f"Codex marketplace plugin {name}: category is required")
+
+    manifest_path = plugin_root / ".codex-plugin" / "plugin.json"
+    if not manifest_path.exists():
+        fail(f"Codex marketplace plugin {name}: missing .codex-plugin/plugin.json")
+    manifest = load_json(manifest_path)
+    if manifest.get("name") != name:
+        fail(f"{manifest_path.relative_to(ROOT)}: manifest name must match marketplace entry {name!r}")
+    if manifest.get("version") != expected_versions[name]:
+        fail(f"{manifest_path.relative_to(ROOT)}: version must match Claude manifest {expected_versions[name]!r}")
+    if manifest.get("skills") != "./skills/":
+        fail(f"{manifest_path.relative_to(ROOT)}: skills must be './skills/'")
+    interface = manifest.get("interface")
+    if not isinstance(interface, dict):
+        fail(f"{manifest_path.relative_to(ROOT)}: interface object is required")
+    for key in ("displayName", "shortDescription", "longDescription", "developerName", "category"):
+        if not isinstance(interface.get(key), str) or not interface.get(key):
+            fail(f"{manifest_path.relative_to(ROOT)}: interface.{key} is required")
+
+    skills_dir = plugin_root / "skills"
+    actual = {p.parent.name for p in skills_dir.glob("*/SKILL.md")}
+    if actual != expected_skills[name]:
+        fail(
+            f"{manifest_path.relative_to(ROOT)}: skills directory does not match Claude manifest: "
+            f"expected {', '.join(sorted(expected_skills[name]))}; got {', '.join(sorted(actual))}"
+        )
+
+    require_text(README, top_readme, "codex plugin marketplace add", "Codex marketplace registration command")
+    return name
+
+
+def validate_codex_marketplace(
+    top_readme: str,
+    expected_skills: dict[str, set[str]],
+    expected_versions: dict[str, str],
+    expected_marketplace_name: str,
+) -> set[str]:
+    marketplace = load_json(CODEX_MARKETPLACE)
+    if marketplace.get("name") != expected_marketplace_name:
+        fail(f"{CODEX_MARKETPLACE.relative_to(ROOT)}: name must match Claude marketplace {expected_marketplace_name!r}")
+    plugins = marketplace.get("plugins")
+    if not isinstance(plugins, list) or not plugins:
+        fail(f"{CODEX_MARKETPLACE.relative_to(ROOT)} must list at least one plugin")
+
+    names: set[str] = set()
+    for plugin_entry in plugins:
+        plugin_name = validate_codex_plugin(plugin_entry, top_readme, expected_skills, expected_versions)
+        if plugin_name in names:
+            fail(f"{CODEX_MARKETPLACE.relative_to(ROOT)} lists duplicate plugin {plugin_name}")
+        names.add(plugin_name)
+
+    missing = set(expected_skills) - names
+    if missing:
+        fail(f"{CODEX_MARKETPLACE.relative_to(ROOT)} missing plugin(s): {', '.join(sorted(missing))}")
+    return names
 
 
 def validate_in_progress(top_readme: str, marketplace_names: set[str]) -> int:
@@ -180,6 +286,9 @@ def validate_in_progress(top_readme: str, marketplace_names: set[str]) -> int:
     manifest_path = IN_PROGRESS / ".claude-plugin" / "plugin.json"
     if manifest_path.exists():
         fail(f"{manifest_path.relative_to(ROOT)}: in-progress must not define a publishable plugin manifest")
+    codex_manifest_path = IN_PROGRESS / ".codex-plugin" / "plugin.json"
+    if codex_manifest_path.exists():
+        fail(f"{codex_manifest_path.relative_to(ROOT)}: in-progress must not define a publishable Codex plugin manifest")
 
     skills_dir = IN_PROGRESS / "skills"
     bucket_readme = skills_dir / "README.md"
@@ -204,29 +313,47 @@ def validate_in_progress(top_readme: str, marketplace_names: set[str]) -> int:
     return len(draft_files)
 
 
+def validate_multimodel_policy() -> None:
+    agents_text = AGENTS.read_text(encoding="utf-8")
+    invocation_text = INVOCATION_DOC.read_text(encoding="utf-8")
+    audit_text = SKILL_AUDIT.read_text(encoding="utf-8")
+
+    require_text(AGENTS, agents_text, "Multimodel support is mandatory", "mandatory multimodel rule")
+    require_text(AGENTS, agents_text, "shared skill behavior must remain agent-neutral", "agent-neutral source rule")
+    require_text(INVOCATION_DOC, invocation_text, "Portability invariant", "invocation portability policy")
+    require_text(SKILL_AUDIT, audit_text, "Check multimodel portability", "skill-audit multimodel gate")
+
+
 def main() -> None:
-    marketplace = load_json(MARKETPLACE)
+    marketplace = load_json(CLAUDE_MARKETPLACE)
     plugins = marketplace.get("plugins")
     if not isinstance(plugins, list) or not plugins:
-        fail("marketplace.json must list at least one plugin")
+        fail("Claude marketplace.json must list at least one plugin")
 
     marketplace_name = marketplace.get("name")
     if not isinstance(marketplace_name, str) or not marketplace_name:
-        fail("marketplace.json missing name")
+        fail("Claude marketplace.json missing name")
 
     top_readme = README.read_text(encoding="utf-8")
     total_skills = 0
     names: set[str] = set()
+    expected_skills: dict[str, set[str]] = {}
+    expected_versions: dict[str, str] = {}
     for plugin_entry in plugins:
-        plugin_name, skill_count = validate_plugin(plugin_entry, top_readme, marketplace_name)
+        plugin_name, version, plugin_skills = validate_claude_plugin(plugin_entry, top_readme, marketplace_name)
         if plugin_name in names:
-            fail(f"marketplace.json lists duplicate plugin {plugin_name}")
+            fail(f"Claude marketplace.json lists duplicate plugin {plugin_name}")
         names.add(plugin_name)
-        total_skills += skill_count
+        expected_skills[plugin_name] = plugin_skills
+        expected_versions[plugin_name] = version
+        total_skills += len(plugin_skills)
 
-    draft_count = validate_in_progress(top_readme, names)
+    codex_names = validate_codex_marketplace(top_readme, expected_skills, expected_versions, marketplace_name)
+    validate_multimodel_policy()
+
+    draft_count = validate_in_progress(top_readme, names | codex_names)
     suffix = f", {draft_count} draft skill(s) checked" if draft_count else ""
-    print(f"OK: {len(names)} plugin(s), {total_skills} promoted skill(s) validated{suffix}")
+    print(f"OK: {len(names)} Claude/Codex plugin(s), {total_skills} promoted skill(s) validated{suffix}")
 
 
 if __name__ == "__main__":

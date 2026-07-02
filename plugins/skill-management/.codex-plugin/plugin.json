@@ -1,0 +1,32 @@
+{
+  "name": "skill-management",
+  "version": "0.2.0",
+  "description": "Skills for managing this marketplace's skill lifecycle, category plugins, package indexes, dependency gates, and publish audits.",
+  "author": {
+    "name": "Ivan Ryazanov"
+  },
+  "repository": "https://github.com/lvLokkie/skills",
+  "keywords": [
+    "agent-skills",
+    "lvlokkie",
+    "skill-management"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Ivan Skill Management",
+    "shortDescription": "Skill authoring and marketplace governance",
+    "longDescription": "Portable personal workflows for auditing, authoring, categorizing, and maintaining agent skills and marketplace packaging.",
+    "developerName": "Ivan Ryazanov",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Interactive"
+    ],
+    "defaultPrompt": [
+      "Audit a marketplace skill change",
+      "Create or update a skill",
+      "Manage a skill category"
+    ],
+    "brandColor": "#1D4ED8",
+    "screenshots": []
+  }
+}

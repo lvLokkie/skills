@@ -1,6 +1,6 @@
 # Skill Management Skills
 
-Promoted skills shipped by the `skill-management` plugin. Keep this list in sync with `.claude-plugin/plugin.json` and the top-level README.
+Promoted skills shipped by the `skill-management` plugin. Keep this list in sync with `.claude-plugin/plugin.json`, `.codex-plugin/plugin.json`, and the top-level README.
 
 Use this category for workflows that manage this repository's skill lifecycle, category plugins, marketplace indexes, dependency gates, and publish readiness. Domain execution skills belong in narrower categories such as `general` or `marketing`.
 
@@ -20,6 +20,6 @@ Reachable only when a human explicitly invokes the skill. None yet.
 
 Before publishing changes in this category:
 
-1. Confirm each promoted skill is listed in `.claude-plugin/plugin.json`, this README, and the top-level README.
+1. Confirm each promoted skill is listed in `.claude-plugin/plugin.json`, `.codex-plugin/plugin.json`, this README, and the top-level README.
 2. Run `/skill-management:skill-audit` for the relevant skill/category CRUD operation and security gate.
-3. Run `python scripts/validate.py`, `git diff --check`, JSON parsing, and `claude plugin validate plugins/skill-management` when Claude CLI is available.
+3. Run `python3 scripts/validate.py`, `git diff --check`, JSON parsing, `claude plugin validate plugins/skill-management` when Claude CLI is available, and `codex plugin marketplace add <path-to-checkout>` when Codex CLI is available.

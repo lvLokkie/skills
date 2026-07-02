@@ -1,21 +1,81 @@
 # Ivan's Universal Skills Marketplace
 
-A personal, vendor-neutral marketplace for shipping Ivan's agent skills across Claude Code, Hermes, Codex, and future agents.
+A personal, vendor-neutral marketplace for shipping Ivan's agent skills across Codex, Claude Code, Hermes, and future agents.
 
 The repo is intentionally small: **skills are the product**, per-agent manifests are thin packaging, and third-party skill repos are treated as dependencies or reference material rather than copied wholesale.
 
-## Install
+## Install & Activate
 
-Claude Code marketplace install:
+Skill bodies are vendor-neutral (see [docs/invocation.md](./docs/invocation.md) and [docs/dependencies.md](./docs/dependencies.md)); packaging is per-agent. Codex and Claude Code are packaged targets; Hermes and other agents consume the same source skills or thin target adapters.
+
+### Codex
+
+This follows the [official Codex plugin flow](https://developers.openai.com/codex/plugins): register a marketplace, then install plugin entries from the Plugin Directory (`/plugins` in Codex CLI).
+
+**Add the marketplace from a local checkout.** Codex reads this repo through `.agents/plugins/marketplace.json`.
+
+```bash
+codex plugin marketplace add <path-to-checkout>
+```
+
+**Add the marketplace from GitHub.** Prerequisite: this is a private GitHub project, so the installing machine needs working git auth — a git credential helper, `gh auth login`, or `GITHUB_TOKEN`. Use the `.git` URL so Codex clones with local git credentials.
+
+```bash
+codex plugin marketplace add --sparse .agents/plugins --sparse plugins https://github.com/lvLokkie/skills.git
+```
+
+**Install plugins.** The current Codex CLI exposes marketplace plugin installation through the plugin browser, not through a separate `codex plugin install` command:
 
 ```text
-/plugin marketplace add lvLokkie/skills
+codex
+/plugins
+```
+
+In the plugin browser, switch to `lvlokkie-skills-marketplace`, then install `general`, `skill-management`, and `marketing`.
+
+**Activate.** Start a new Codex session after installing or upgrading the plugins. The available skill names are:
+
+```text
+general:report-writing
+general:make-me-rich
+skill-management:skill-audit
+skill-management:skill-authoring
+skill-management:skill-category-management
+marketing:lidfly-mcp
+marketing:ad-campaign-operations
+marketing:avito-ads-feed
+marketing:lead-routing-tracking
+```
+
+Manual update for a Git-backed marketplace:
+
+```bash
+codex plugin marketplace upgrade lvlokkie-skills-marketplace
+```
+
+For a local checkout marketplace, update the checkout and start a new Codex session.
+
+### Claude Code
+
+**Install from a terminal.** Prerequisite: this is a private GitHub project, so the installing machine needs working git auth — a git credential helper, `gh auth login`, or `GITHUB_TOKEN`. Use the `.git` URL so the marketplace is cloned with git credentials.
+
+```bash
+claude plugin marketplace add https://github.com/lvLokkie/skills.git
+claude plugin install general@lvlokkie-skills-marketplace
+claude plugin install skill-management@lvlokkie-skills-marketplace
+claude plugin install marketing@lvlokkie-skills-marketplace
+```
+
+Equivalent commands inside Claude Code:
+
+```text
+/plugin marketplace add https://github.com/lvLokkie/skills.git
 /plugin install general@lvlokkie-skills-marketplace
 /plugin install skill-management@lvlokkie-skills-marketplace
 /plugin install marketing@lvlokkie-skills-marketplace
 ```
 
-The `marketing` plugin includes an optional LidFly MCP config with a `${LIDFLY_API_KEY}` placeholder; set the secret in the target runtime or use the documented offline fallback.
+**Activate.** Installed plugins load on the next session. Restart Claude Code, or run `/reload-plugins` to apply without restarting. Confirm with `/plugin` (Installed tab) or `claude plugin list`.
 
 Run promoted skills:
 
@@ -31,7 +91,20 @@ Run promoted skills:
 /marketing:lead-routing-tracking
 ```
 
-For private clones, installation needs a git credential helper or `GITHUB_TOKEN` available to the installing machine.
+**Keep it updated.** Refresh the marketplace and installed plugins explicitly:
+
+```text
+claude plugin marketplace update lvlokkie-skills-marketplace
+claude plugin update general@lvlokkie-skills-marketplace
+claude plugin update skill-management@lvlokkie-skills-marketplace
+claude plugin update marketing@lvlokkie-skills-marketplace
+```
+
+Updates rely on valid GitHub credentials; if they expire, re-authenticate.
+
+### Other agents
+
+Skill sources under `plugins/<category>/skills/<name>/SKILL.md` are kept portable, so a target agent can consume them directly or through a thin per-agent manifest; add new packaging alongside the Codex and Claude Code entries rather than forking the skill bodies.
 
 ## Principles adopted from `mattpocock/skills`
 
@@ -91,9 +164,11 @@ None yet. Prefer direct upstream dependencies for generic command skills like `h
 
 | Path | Role |
 |---|---|
+| `.agents/plugins/marketplace.json` | Codex marketplace entry pointing at category plugin packages. |
 | `.claude-plugin/marketplace.json` | Claude marketplace entry pointing at category plugin packages. |
+| `plugins/<category>/.codex-plugin/plugin.json` | Codex category plugin manifest and presentation metadata. |
 | `plugins/<category>/.claude-plugin/plugin.json` | Thin category plugin manifest; must list promoted skill folders. |
-| `plugins/<category>/skills/<name>/SKILL.md` | Source of truth for shipped Claude skills. |
+| `plugins/<category>/skills/<name>/SKILL.md` | Source of truth for shipped skills. |
 | `plugins/<category>/skills/README.md` | Category catalog grouped by invocation class. |
 | `docs/invocation.md` | Invocation taxonomy and dependency style. |
 | `docs/lifecycle.md` | Draft → published skill lifecycle, including the non-published `in-progress` category. |
@@ -112,11 +187,11 @@ Skill/category operations are packaged as skills, not kept as README-only proced
 Minimum verification remains:
 
 ```bash
-python scripts/validate.py
+python3 scripts/validate.py
 git diff --check
 ```
 
-Also parse changed JSON manifests and run `claude plugin validate .` plus `claude plugin validate plugins/<changed-category>` when Claude CLI is available.
+Also parse changed JSON manifests, run `claude plugin validate .` plus `claude plugin validate plugins/<changed-category>` when Claude CLI is available, and smoke-test Codex marketplace registration with `codex plugin marketplace add <path-to-checkout>` when Codex CLI is available. Codex plugin installation itself is interactive through `/plugins`.
 
 ## Dependency policy
 

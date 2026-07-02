@@ -12,7 +12,9 @@ Manage each published category as an installable marketplace plugin. A category 
 Use this skill when a change touches:
 
 - `.claude-plugin/marketplace.json` plugin entries;
+- `.agents/plugins/marketplace.json` plugin entries;
 - `plugins/<category>/.claude-plugin/plugin.json`;
+- `plugins/<category>/.codex-plugin/plugin.json`;
 - `plugins/<category>/skills/README.md`;
 - install/run examples in the top-level README;
 - category boundaries, category names, plugin descriptions, or category versions;
@@ -22,12 +24,13 @@ Use `skill-authoring` for the detailed per-skill content after the category boun
 
 ## Category design rules
 
-1. **Use durable domains.** Category names must be kebab-case domains such as `general`, `marketing`, or `skill-management`, not one-off projects or lifecycle states.
-2. **Keep `in-progress` special.** `plugins/in-progress` is a draft lifecycle area, not a marketplace plugin. Never list it in `.claude-plugin/marketplace.json`, install examples, or public run examples.
+1. **Use durable domains.** Category names must be kebab-case domains such as `general`, `skill-management`, or a new domain name, not one-off projects or lifecycle states.
+2. **Keep `in-progress` special.** `plugins/in-progress` is a draft lifecycle area, not a marketplace plugin. Never list it in `.claude-plugin/marketplace.json`, `.agents/plugins/marketplace.json`, install examples, or public run examples.
 3. **Ship at least one real skill.** Do not publish placeholder-only category plugins.
 4. **Keep manifests thin.** Behavior belongs in skills/docs; plugin and marketplace manifests only describe installable packages and list skill folders.
 5. **Prefer moves over duplication.** If a skill belongs in the new category, move it and update every old reference instead of copying it.
-6. **Bump only affected plugin versions.** New category starts at `0.1.0`. Moving/removing/changing shipped skills bumps old and new affected category manifests.
+6. **Keep categories runtime-neutral.** Category boundaries are capability domains, not agent-runtime packages; target-specific packaging belongs in manifests and target-specific README sections.
+7. **Bump only affected plugin versions.** New category starts at `0.1.0`. Moving/removing/changing shipped skills bumps old and new affected category manifests.
 
 ## Category CRUD loop
 
@@ -36,9 +39,11 @@ Use `skill-authoring` for the detailed per-skill content after the category boun
 3. **Design the boundary.** State why the category is a durable domain and which skills belong there. Leave cross-domain skills in `general` only when no narrower domain applies.
 4. **Edit source files.** Create/update:
    - `plugins/<category>/.claude-plugin/plugin.json`;
+   - `plugins/<category>/.codex-plugin/plugin.json`;
    - `plugins/<category>/skills/README.md`;
    - one or more `plugins/<category>/skills/<name>/SKILL.md` files;
    - `.claude-plugin/marketplace.json`;
+   - `.agents/plugins/marketplace.json`;
    - top-level README install/run examples and promoted category table.
 5. **Update references.** Replace stale `/old-category:skill`, old paths, dependency notes, and category examples. If a command path changed, include the migration in the final report.
 6. **Run `/skill-management:skill-audit`.** Apply category CRUD, skill move/promotion, dependency, packaging, and industrial security gates.
@@ -59,10 +64,12 @@ Before removing a category:
 Run from the repo root:
 
 ```bash
-python scripts/validate.py
+python3 scripts/validate.py
 git diff --check
-python -m json.tool .claude-plugin/marketplace.json >/dev/null
-python -m json.tool plugins/<category>/.claude-plugin/plugin.json >/dev/null
+python3 -m json.tool .agents/plugins/marketplace.json >/dev/null
+python3 -m json.tool .claude-plugin/marketplace.json >/dev/null
+python3 -m json.tool plugins/<category>/.codex-plugin/plugin.json >/dev/null
+python3 -m json.tool plugins/<category>/.claude-plugin/plugin.json >/dev/null
 ```
 
 If Claude CLI is available, also run:
@@ -72,4 +79,10 @@ claude plugin validate .
 claude plugin validate plugins/<category>
 ```
 
-Completion criterion: marketplace, plugin manifests, category README, top-level README, dependency docs, versions, and validation all agree; no stale category command/path references remain except explicit migration notes.
+If Codex CLI is available, smoke-test marketplace registration from the checkout:
+
+```bash
+codex plugin marketplace add <path-to-checkout>
+```
+
+Completion criterion: marketplace, plugin manifests, category README, top-level README, dependency docs, versions, multimodel portability, and validation all agree; no stale category command/path references remain except explicit migration notes.

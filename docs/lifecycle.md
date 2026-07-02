@@ -15,9 +15,9 @@ This repo separates **draft lifecycle** from **published marketplace distributio
 
 `plugins/in-progress` is a **lifecycle category**, not a marketplace plugin:
 
-- do not list it in `.claude-plugin/marketplace.json`;
+- do not list it in `.claude-plugin/marketplace.json` or `.agents/plugins/marketplace.json`;
 - do not add `/in-progress:*` install/run examples to the top-level README;
-- do not create `plugins/in-progress/.claude-plugin/plugin.json` unless the category is intentionally being promoted, which should be rare and explicit;
+- do not create `plugins/in-progress/.claude-plugin/plugin.json` or `plugins/in-progress/.codex-plugin/plugin.json` unless the category is intentionally being promoted, which should be rare and explicit;
 - draft skills still need valid `SKILL.md` frontmatter (`name`, `description`) and should be listed in `plugins/in-progress/skills/README.md` when the directory exists;
 - draft skills may be incomplete, but must state their current gap, stop condition, and promotion target if known;
 - no secrets, local auth state, generated catalogs, or project-private values are allowed in drafts.
@@ -29,9 +29,9 @@ Promote a draft only when it passes the same bar as any published skill:
 1. Choose the durable published category (`general`, `marketing`, or a new domain category).
 2. Move the skill folder out of `plugins/in-progress/skills/` into `plugins/<category>/skills/`.
 3. Remove draft-only caveats or convert them into explicit preflight/fallback/stop behavior.
-4. Update the destination category `skills/README.md`, `plugins/<category>/.claude-plugin/plugin.json`, the top-level README, and dependency docs when needed.
+4. Update the destination category `skills/README.md`, `plugins/<category>/.claude-plugin/plugin.json`, `plugins/<category>/.codex-plugin/plugin.json`, both marketplace manifests, the top-level README, and dependency docs when needed.
 5. Bump only the destination category plugin version for shipped behavior changes.
-6. Run `/skill-management:skill-audit`, `python scripts/validate.py`, `git diff --check`, JSON parsing, plugin validation for the destination category, and the security gate.
+6. Run `/skill-management:skill-audit`, `python3 scripts/validate.py`, `git diff --check`, JSON parsing, Claude plugin validation for the destination category when available, Codex marketplace registration smoke test when available, and the security gate.
 
 ## External `in-progress/*` dependencies
 

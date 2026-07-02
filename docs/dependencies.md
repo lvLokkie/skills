@@ -24,7 +24,7 @@ Default rule: keep runtime packages self-contained, document upstream dependenci
 | Soft-dependency fallback | Avoids blocking useful work when MCP/API/tracker access is missing. | Every optional tool/API branch must say what fallback is allowed. |
 | Self-contained plugin bundle | Installed plugin has the files it needs; maintainer-only shared sources are not runtime deps. | Runtime skill folders own their references/templates/scripts. Shared repo docs are policy, not runtime imports. |
 | Stdlib/zero-config scripts | Reduces supply-chain and install failures. | Prefer stdlib scripts with sample mode; document unavoidable package/tool deps in the skill. |
-| Generated catalogs + validators | Prevents README/manifest drift. | Update README, bucket README, plugin manifest, and run `python scripts/validate.py`. |
+| Generated catalogs + validators | Prevents README/manifest drift. | Update README, bucket README, Claude/Codex plugin manifests, and run `python3 scripts/validate.py`. |
 
 ## Declaring upstream skill dependencies
 
@@ -130,13 +130,13 @@ Do not add `plugin.json dependencies` until all are true:
 3. The dependency is needed by a promoted skill, not just a docs preference.
 4. The install path was tested from a clean checkout/account.
 5. The README states the install/update behavior and fallback if dependency install fails.
-6. `python scripts/validate.py` or a follow-up validator checks the dependency declaration shape.
+6. `python3 scripts/validate.py` or a follow-up validator checks the dependency declaration shape.
 
 Until then, use documented upstream references and local adapters.
 
 ## Versioning impact
 
-- Bump the owning `plugins/<category>/.claude-plugin/plugin.json` when a shipped skill, shipped support file, or plugin manifest behavior changes.
+- Bump the owning `plugins/<category>/.claude-plugin/plugin.json` and `plugins/<category>/.codex-plugin/plugin.json` when a shipped skill, shipped support file, or plugin manifest behavior changes.
 - Do not bump the plugin version for repo-only docs that do not change installed skill behavior.
 - If dependency policy changes alter how a promoted skill should execute, update the skill and bump the plugin version in the same commit.
 
@@ -150,4 +150,4 @@ Before adding or changing a dependency:
 - [ ] If MCP is involved, is distribution mode, transport, auth storage, tool scope, live-discovery test, fallback, and stop condition explicit?
 - [ ] Are secrets excluded from docs and examples?
 - [ ] Are we copying upstream text? If yes, is the compatibility gap and ownership recorded?
-- [ ] Are README, bucket README, plugin manifest, and validators still in sync?
+- [ ] Are README, bucket README, Claude/Codex plugin manifests, and validators still in sync?

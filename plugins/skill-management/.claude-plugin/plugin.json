@@ -1,7 +1,7 @@
 {
   "name": "skill-management",
   "description": "Skills for managing this marketplace's skill lifecycle, category plugins, package indexes, dependency gates, and publish audits.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": {
     "name": "Ivan Ryazanov"
   },

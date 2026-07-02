@@ -1,0 +1,31 @@
+{
+  "name": "general",
+  "version": "0.7.0",
+  "description": "General-purpose agent skills that do not belong to a narrower domain category.",
+  "author": {
+    "name": "Ivan Ryazanov"
+  },
+  "repository": "https://github.com/lvLokkie/skills",
+  "keywords": [
+    "agent-skills",
+    "lvlokkie",
+    "general"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Ivan General Skills",
+    "shortDescription": "General-purpose personal agent skills",
+    "longDescription": "Portable personal skills for report writing, rich-task planning, and other general agent workflows.",
+    "developerName": "Ivan Ryazanov",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive"
+    ],
+    "defaultPrompt": [
+      "Write an evidence-backed report",
+      "Plan a task with cheaper sub-agents"
+    ],
+    "brandColor": "#0F766E",
+    "screenshots": []
+  }
+}

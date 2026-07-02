@@ -2,6 +2,14 @@
 
 This marketplace follows the same core split as `mattpocock/skills`: every promoted skill is either **model-invoked** or **user-invoked**.
 
+## Portability invariant
+
+Invocation class is a behavior contract, not a single-runtime feature. Keep the canonical `SKILL.md` metadata and behavior portable across supported agents and model families:
+
+- Shared skill bodies describe actions, inputs, outputs, fallback, and checks without naming proprietary tools as the only path.
+- Target-specific command syntax, install behavior, manifest fields, and runtime caveats belong in per-agent manifests or target-specific README sections.
+- If a target cannot consume a field or invocation mode directly, add a thin adapter or document the target-specific prerequisite, fallback, and stop condition; do not fork the skill body just to satisfy one runtime.
+
 ## Model-invoked
 
 Use for reusable behavior an agent should reach for autonomously, or behavior another skill must be able to call.

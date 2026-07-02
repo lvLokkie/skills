@@ -1,16 +1,18 @@
 # AGENTS.md — Working Rules
 
-Personal, vendor-neutral skills marketplace. Single source of truth for Ivan's promoted agent skills, packaged first for Claude Code and kept portable to Hermes, Codex, and future agents.
+Personal, vendor-neutral skills marketplace. Single source of truth for Ivan's promoted agent skills, packaged for Codex and Claude Code and kept portable to Hermes and future agents. Multimodel support is mandatory: marketplace changes must preserve reusable behavior across supported agents and model families unless a documented target-specific limitation makes that impossible.
 
 ## 1. Layout — where things live
 
 | Path | Role | Edit? |
 |---|---|---|
-| `plugins/<category>/skills/<name>/SKILL.md` | Source for shipped Claude skills | ✅ source |
+| `plugins/<category>/skills/<name>/SKILL.md` | Source for shipped skills | ✅ source |
 | `plugins/<category>/skills/README.md` | Category skill catalog grouped by invocation class | ✅ source |
 | `plugins/in-progress/skills/<name>/SKILL.md` | Draft skill lifecycle area; not published or installed | ✅ source |
-| `.claude-plugin/marketplace.json` | Marketplace entry pointing at plugin/category packages | ✅ thin |
-| `plugins/<category>/.claude-plugin/plugin.json` | Category plugin manifest and promoted skill list | ✅ thin |
+| `.agents/plugins/marketplace.json` | Codex marketplace entry pointing at plugin/category packages | ✅ thin |
+| `.claude-plugin/marketplace.json` | Claude marketplace entry pointing at plugin/category packages | ✅ thin |
+| `plugins/<category>/.codex-plugin/plugin.json` | Codex category plugin manifest and promoted skill directory | ✅ thin |
+| `plugins/<category>/.claude-plugin/plugin.json` | Claude category plugin manifest and promoted skill list | ✅ thin |
 | `.mcp.json` or runtime MCP manifest, if added | MCP server distribution metadata only: endpoints/packages/placeholders, no secrets | ✅ thin |
 | `docs/` | Invocation model, dependency policy, dependency rationale, ADRs/reference notes | ✅ source |
 | `AGENTS.md` | Canonical agent instructions for this repo | ✅ source |
@@ -22,8 +24,10 @@ Generated compatibility files are downstream artifacts. If a generated file is s
 
 1. Skill bodies describe actions and checks, not proprietary tool names.
 2. Per-agent manifests are packaging only; behavior belongs in `SKILL.md` or docs.
-3. External capability is declared via open standards or documented prerequisites; never hide dependency logic in prose.
-4. Third-party skill repos are dependencies/reference material, not folders to mirror wholesale or prose to rewrite locally.
+3. External capability is declared via open standards, Codex/Claude manifests, or documented prerequisites; never hide dependency logic in prose.
+4. Target-specific syntax, install commands, manifests, and runtime caveats stay in target-specific docs or manifests; shared skill behavior must remain agent-neutral.
+5. Do not encode assumptions that only one model family, one agent runtime, or one proprietary tool can satisfy unless the owning skill documents the prerequisite, fallback, and stop condition.
+6. Third-party skill repos are dependencies/reference material, not folders to mirror wholesale or prose to rewrite locally.
 
 ## 3. Invocation taxonomy
 
@@ -32,7 +36,7 @@ Every promoted skill is either:
 - **Model-invoked** — no `disable-model-invocation`; description is model-facing and includes distinct trigger branches.
 - **User-invoked** — `disable-model-invocation: true`; description is a human-facing one-line summary.
 
-Keep README, bucket README, and plugin manifest in sync. See `docs/invocation.md`.
+Keep README, bucket README, and per-agent plugin manifests in sync. See `docs/invocation.md`.
 
 ## 4. Skill authoring
 
@@ -63,20 +67,21 @@ Keep README, bucket README, and plugin manifest in sync. See `docs/invocation.md
 
 ## 6. Versioning and releases
 
-- Bump the owning `plugins/<category>/.claude-plugin/plugin.json` version on behavior changes.
-- Keep `.claude-plugin/marketplace.json` description aligned with the plugin manifest.
-- Never list `in-progress` in `.claude-plugin/marketplace.json`, install examples, or public run examples. Promote by moving the skill into a real category, updating that category manifest/README, and passing `/skill-management:skill-audit`.
+- Bump the owning `plugins/<category>/.claude-plugin/plugin.json` and `plugins/<category>/.codex-plugin/plugin.json` versions on behavior changes.
+- Keep `.claude-plugin/marketplace.json`, `.agents/plugins/marketplace.json`, and category plugin manifests aligned.
+- Never list `in-progress` in `.claude-plugin/marketplace.json`, `.agents/plugins/marketplace.json`, install examples, or public run examples. Promote by moving the skill into a real category, updating that category manifest/README, and passing `/skill-management:skill-audit`.
 - Do not commit or push without explicit user instruction.
 
 ## 7. Definition of done
 
 - [ ] Edited source files, not generated files
-- [ ] README, bucket README, and plugin manifest agree on promoted skills
+- [ ] README, bucket README, Claude manifest, and Codex manifest agree on promoted skills
+- [ ] Multimodel portability is preserved, or any target-specific limitation has a documented prerequisite, fallback, and stop condition
 - [ ] No placeholder skills are shipped
 - [ ] No secrets or local-only credentials introduced
 - [ ] Version bumped for behavior changes
 - [ ] No commit or push was performed unless Ivan explicitly asked for it
-- [ ] `python scripts/validate.py` passes
+- [ ] `python3 scripts/validate.py` passes
 - [ ] `git diff --check` passes
-- [ ] Plugin JSON parses and `claude plugin validate .` plus `claude plugin validate plugins/<changed-category>` pass when Claude CLI is available
+- [ ] Plugin JSON parses, `claude plugin validate .` plus `claude plugin validate plugins/<changed-category>` pass when Claude CLI is available, and `codex plugin marketplace add <path-to-checkout>` marketplace registration is smoke-tested when Codex CLI is available
 - [ ] `/skill-management:skill-audit` security gate was run on changed/candidate files
