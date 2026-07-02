@@ -1,0 +1,31 @@
+{
+  "name": "in-progress",
+  "version": "0.1.0",
+  "description": "Manual-only draft skills for evaluation before promotion; not stable public workflows.",
+  "author": {
+    "name": "Ivan Ryazanov"
+  },
+  "repository": "https://github.com/lvLokkie/skills",
+  "keywords": [
+    "agent-skills",
+    "lvlokkie",
+    "in-progress",
+    "drafts"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Ivan In-Progress Skills",
+    "shortDescription": "Manual-only draft skills for evaluation",
+    "longDescription": "Draft personal skills that are installable for explicit manual use before they graduate to a stable marketplace category.",
+    "developerName": "Ivan Ryazanov",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Interactive"
+    ],
+    "defaultPrompt": [
+      "Run a draft wizard workflow"
+    ],
+    "brandColor": "#6B7280",
+    "screenshots": []
+  }
+}

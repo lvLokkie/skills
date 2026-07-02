@@ -1,24 +1,24 @@
 # Skill lifecycle
 
-This repo separates **draft lifecycle** from **published marketplace distribution**. A skill can be useful before it is ready to install as part of `lvlokkie-skills-marketplace`; that work should have an explicit home and promotion gate instead of being mixed into public categories by accident.
+This repo separates **draft lifecycle** from **stable marketplace distribution**. A skill can be useful before it is ready as a stable workflow; that work has an explicit manual-only home and promotion gate instead of being mixed into stable public categories by accident.
 
 ## Lifecycle states
 
 | State | Home | Published? | Purpose |
 |---|---|---:|---|
 | Candidate / reference | `docs/*-candidates.md`, upstream URL, or local notes | No | Track external ideas and dependency decisions without copying or shipping them. |
-| Draft / in-progress | `plugins/in-progress/skills/<name>/` | No | Develop a local skill body before it is safe, stable, and useful enough for public install. |
+| Draft / in-progress | `plugins/in-progress/skills/<name>/` | Manual-only | Evaluate a local skill body before it is safe, stable, and useful enough for stable categories. |
 | Published | `plugins/<category>/skills/<name>/` where `<category>` is not `in-progress` | Yes, when listed in that category plugin manifest and marketplace docs | Shipped skill users can install/run through a category plugin. |
 | Deprecated / absorbed | Historical docs or removed tree with migration note | No new installs | Preserve migration/dependency rationale only when useful. |
 
 ## `in-progress` category rules
 
-`plugins/in-progress` is a **lifecycle category**, not a marketplace plugin:
+`plugins/in-progress` is a **manual-only lifecycle plugin**, not a stable marketplace category:
 
-- do not list it in `.claude-plugin/marketplace.json` or `.agents/plugins/marketplace.json`;
-- do not add `/in-progress:*` install/run examples to the top-level README;
-- do not create `plugins/in-progress/.claude-plugin/plugin.json` or `plugins/in-progress/.codex-plugin/plugin.json` unless the category is intentionally being promoted, which should be rare and explicit;
-- draft skills still need valid `SKILL.md` frontmatter (`name`, `description`) and should be listed in `plugins/in-progress/skills/README.md` when the directory exists;
+- list it in `.claude-plugin/marketplace.json` and `.agents/plugins/marketplace.json` only so drafts can be manually installed;
+- every draft skill must be user-invoked with `disable-model-invocation: true`;
+- public docs may show `/in-progress:*` only under an explicit manual-only draft section;
+- draft skills still need valid `SKILL.md` frontmatter (`name`, `description`, `disable-model-invocation: true`) and must be listed in `plugins/in-progress/skills/README.md`;
 - draft skills may be incomplete, but must state their current gap, stop condition, and promotion target if known;
 - no secrets, local auth state, generated catalogs, or project-private values are allowed in drafts.
 
@@ -35,10 +35,10 @@ Promote a draft only when it passes the same bar as any published skill:
 
 ## External `in-progress/*` dependencies
 
-Upstream `in-progress/*` skills are not promoted by default. They may be tracked as **candidate/reference** material, then either:
+Upstream `in-progress/*` skills are not stable-promoted by default. They may be tracked as **candidate/reference** material, manually installed under `plugins/in-progress`, then either:
 
 - remain reference-only;
-- become a thin local adapter in `plugins/in-progress` while we test the invariant;
+- become a manual-only local adapter in `plugins/in-progress` while we test the invariant;
 - be promoted to a published category after the promotion gate passes.
 
 Do not copy a whole upstream draft category into this repo.

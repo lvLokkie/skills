@@ -1,0 +1,11 @@
+{
+  "name": "in-progress",
+  "description": "Manual-only draft skills for evaluation before promotion; not stable public workflows.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Ivan Ryazanov"
+  },
+  "skills": [
+    "./skills/wizard"
+  ]
+}

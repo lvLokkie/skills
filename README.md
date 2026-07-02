@@ -31,7 +31,7 @@ codex
 /plugins
 ```
 
-In the plugin browser, switch to `lvlokkie-skills-marketplace`, then install `general`, `skill-management`, and `marketing`.
+In the plugin browser, switch to `lvlokkie-skills-marketplace`, then install `general`, `skill-management`, and `marketing`; optionally install `in-progress` for manual-only draft skills.
 
 **Activate.** Start a new Codex session after installing or upgrading the plugins. The available skill names are:
 
@@ -45,6 +45,8 @@ marketing:lidfly-mcp
 marketing:ad-campaign-operations
 marketing:avito-ads-feed
 marketing:lead-routing-tracking
+# Optional manual-only draft skill:
+in-progress:wizard
 ```
 
 Manual update for a Git-backed marketplace:
@@ -64,6 +66,8 @@ claude plugin marketplace add https://github.com/lvLokkie/skills.git
 claude plugin install general@lvlokkie-skills-marketplace
 claude plugin install skill-management@lvlokkie-skills-marketplace
 claude plugin install marketing@lvlokkie-skills-marketplace
+# Optional manual-only draft skills:
+claude plugin install in-progress@lvlokkie-skills-marketplace
 ```
 
 Equivalent commands inside Claude Code:
@@ -73,6 +77,8 @@ Equivalent commands inside Claude Code:
 /plugin install general@lvlokkie-skills-marketplace
 /plugin install skill-management@lvlokkie-skills-marketplace
 /plugin install marketing@lvlokkie-skills-marketplace
+# Optional manual-only draft skills:
+/plugin install in-progress@lvlokkie-skills-marketplace
 ```
 
 **Activate.** Installed plugins load on the next session. Restart Claude Code, or run `/reload-plugins` to apply without restarting. Confirm with `/plugin` (Installed tab) or `claude plugin list`.
@@ -89,6 +95,8 @@ Run promoted skills:
 /marketing:ad-campaign-operations
 /marketing:avito-ads-feed
 /marketing:lead-routing-tracking
+# Optional manual-only draft skill:
+/in-progress:wizard
 ```
 
 **Keep it updated.** Refresh the marketplace and installed plugins explicitly:
@@ -117,9 +125,9 @@ Skill sources under `plugins/<category>/skills/<name>/SKILL.md` are kept portabl
 
 See [docs/invocation.md](./docs/invocation.md), [docs/dependencies.md](./docs/dependencies.md), and [docs/mattpocock-dependency-candidates.md](./docs/mattpocock-dependency-candidates.md).
 
-Draft skills that are not ready for users live in the lifecycle category described in [docs/lifecycle.md](./docs/lifecycle.md); `in-progress` is intentionally not installed from the marketplace.
+Draft skills that are not ready for stable users live in the lifecycle category described in [docs/lifecycle.md](./docs/lifecycle.md); `in-progress` is available as an optional manual-only plugin for explicit evaluation.
 
-## Promoted categories and skills
+## Categories and skills
 
 ### `general`
 
@@ -156,6 +164,17 @@ Draft skills that are not ready for users live in the lifecycle category describ
 | [avito-ads-feed](./plugins/marketing/skills/avito-ads-feed/SKILL.md) | Generate, audit, and smoke-test Avito service ad feeds, branded cards, listing copy, category mappings, and feed coverage. |
 | [lead-routing-tracking](./plugins/marketing/skills/lead-routing-tracking/SKILL.md) | Audit and smoke-test lead forms, UTM/referrer attribution, n8n routing, Telegram/MAX delivery, and analytics goals. |
 
+
+### `in-progress`
+
+Manual-only draft skills. Install this category only when you explicitly want to evaluate unfinished workflows; draft skills are not model-invoked and are not stable public workflows.
+
+#### User-invoked
+
+| Skill | Purpose |
+|---|---|
+| [wizard](./plugins/in-progress/skills/wizard/SKILL.md) | Generate an interactive bash wizard for a manual setup, migration, or state transition while preserving confirmation and secret-handling gates. |
+
 ### User-invoked
 
 None yet. Prefer direct upstream dependencies for generic command skills like `handoff` unless this marketplace needs a local platform adapter.
@@ -169,7 +188,7 @@ None yet. Prefer direct upstream dependencies for generic command skills like `h
 | `plugins/<category>/.codex-plugin/plugin.json` | Codex category plugin manifest and presentation metadata. |
 | `plugins/<category>/.claude-plugin/plugin.json` | Thin category plugin manifest; must list promoted skill folders. |
 | `plugins/<category>/skills/<name>/SKILL.md` | Source of truth for shipped skills. |
-| `plugins/in-progress/skills/<name>/SKILL.md` | Draft lifecycle area for skills that are not published or installed. |
+| `plugins/in-progress/skills/<name>/SKILL.md` | Manual-only draft lifecycle area for skills that are installable only for explicit evaluation. |
 | `plugins/<category>/skills/README.md` | Category catalog grouped by invocation class. |
 | `docs/invocation.md` | Invocation taxonomy and dependency style. |
 | `docs/lifecycle.md` | Draft → published skill lifecycle, including the non-published `in-progress` category. |
@@ -201,4 +220,4 @@ Also parse changed JSON manifests, run `claude plugin validate .` plus `claude p
 - Classify dependencies as hard, soft, reference, tool, MCP, or plugin dependencies in [docs/dependencies.md](./docs/dependencies.md).
 - For overlaps, prefer upstream dependency/reference plus a thin local adapter; do not restate the full upstream skill locally.
 - If the target agent cannot consume the upstream skill directly, document the compatibility gap and maintenance owner before forking/adapting text.
-- Do not ship personal, in-progress, or deprecated upstream skills unless there is a fresh local audit.
+- Do not ship personal, in-progress, or deprecated upstream skills as stable workflows unless there is a fresh local audit and promotion.

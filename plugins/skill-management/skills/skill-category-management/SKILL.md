@@ -5,7 +5,7 @@ description: "Create, update, rename, split, merge, or remove marketplace catego
 
 # Skill category management
 
-Manage each published category as an installable marketplace plugin. A category is not just a README heading: it is a package with a manifest, skill catalog, promoted skills, top-level install/run examples, and validation coverage.
+Manage each stable category as an installable marketplace plugin. A category is not just a README heading: it is a package with a manifest, skill catalog, promoted skills, top-level install/run examples, and validation coverage. `in-progress` is the exception: an installable manual-only lifecycle plugin for explicit draft evaluation.
 
 ## Scope gate
 
@@ -24,9 +24,9 @@ Use `skill-authoring` for the detailed per-skill content after the category boun
 
 ## Category design rules
 
-1. **Use durable domains.** Category names must be kebab-case domains such as `general`, `skill-management`, or a new domain name, not one-off projects or lifecycle states.
-2. **Keep `in-progress` special.** `plugins/in-progress` is a draft lifecycle area, not a marketplace plugin. Never list it in `.claude-plugin/marketplace.json`, `.agents/plugins/marketplace.json`, install examples, or public run examples.
-3. **Ship at least one real skill.** Do not publish placeholder-only category plugins.
+1. **Use durable domains.** Stable category names must be kebab-case domains such as `general`, `marketing`, `skill-management`, or a new domain name, not one-off projects.
+2. **Keep `in-progress` special.** `plugins/in-progress` is the only lifecycle plugin: list it in Claude/Codex marketplaces only for explicit manual installation; every draft skill must set `disable-model-invocation: true`; examples must be labeled manual-only/draft.
+3. **Ship at least one real skill.** Do not publish placeholder-only category plugins; `in-progress` may contain draft skills, but not placeholders.
 4. **Keep manifests thin.** Behavior belongs in skills/docs; plugin and marketplace manifests only describe installable packages and list skill folders.
 5. **Prefer moves over duplication.** If a skill belongs in the new category, move it and update every old reference instead of copying it.
 6. **Keep categories runtime-neutral.** Category boundaries are capability domains, not agent-runtime packages; target-specific packaging belongs in manifests and target-specific README sections.
@@ -53,7 +53,7 @@ Use `skill-authoring` for the detailed per-skill content after the category boun
 
 Before removing a category:
 
-- [ ] No promoted install path still needs the category.
+- [ ] No stable or manual draft install path still needs the category.
 - [ ] Skills are moved, deleted with a migration target, or intentionally retired.
 - [ ] Marketplace entry, install examples, run examples, category README, and plugin manifest references are gone.
 - [ ] Searches find no live `/category:*` command references except migration notes.

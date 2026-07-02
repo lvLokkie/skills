@@ -19,6 +19,11 @@
       "name": "marketing",
       "source": "./plugins/marketing",
       "description": "Marketing and paid-acquisition operations skills for campaign setup, audit, reporting, lead routing, Avito feed checks, and MCP-assisted optimization."
+    },
+    {
+      "name": "in-progress",
+      "source": "./plugins/in-progress",
+      "description": "Manual-only draft skills for evaluation before promotion; not stable public workflows."
     }
   ]
 }

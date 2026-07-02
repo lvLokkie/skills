@@ -8,7 +8,7 @@ Personal, vendor-neutral skills marketplace. Single source of truth for Ivan's p
 |---|---|---|
 | `plugins/<category>/skills/<name>/SKILL.md` | Source for shipped skills | ✅ source |
 | `plugins/<category>/skills/README.md` | Category skill catalog grouped by invocation class | ✅ source |
-| `plugins/in-progress/skills/<name>/SKILL.md` | Draft skill lifecycle area; not published or installed | ✅ source |
+| `plugins/in-progress/skills/<name>/SKILL.md` | Manual-only draft skill lifecycle area; not stable/published | ✅ source |
 | `.agents/plugins/marketplace.json` | Codex marketplace entry pointing at plugin/category packages | ✅ thin |
 | `.claude-plugin/marketplace.json` | Claude marketplace entry pointing at plugin/category packages | ✅ thin |
 | `plugins/<category>/.codex-plugin/plugin.json` | Codex category plugin manifest and promoted skill directory | ✅ thin |
@@ -42,7 +42,7 @@ Keep README, bucket README, and per-agent plugin manifests in sync. See `docs/in
 ## 4. Skill authoring
 
 - One skill = one folder under `plugins/<category>/skills/<kebab-name>/`.
-- Use `plugins/in-progress/skills/<kebab-name>/` for draft skills that should not be deployed to users yet; `in-progress` is a lifecycle category, not a marketplace plugin.
+- Use `plugins/in-progress/skills/<kebab-name>/` for draft skills that should not be deployed as stable workflows yet; `in-progress` is a manual-only lifecycle plugin and every draft skill must set `disable-model-invocation: true`.
 - Frontmatter must include `name` and `description`.
 - Keep `SKILL.md` focused on the execution path; put heavy references in sibling files.
 - Every step needs a checkable completion criterion.
@@ -70,7 +70,7 @@ Keep README, bucket README, and per-agent plugin manifests in sync. See `docs/in
 
 - Bump the owning `plugins/<category>/.claude-plugin/plugin.json` and `plugins/<category>/.codex-plugin/plugin.json` versions on behavior changes.
 - Keep `.claude-plugin/marketplace.json`, `.agents/plugins/marketplace.json`, and category plugin manifests aligned.
-- Never list `in-progress` in `.claude-plugin/marketplace.json`, `.agents/plugins/marketplace.json`, install examples, or public run examples. Promote by moving the skill into a real category, updating that category manifest/README, and passing `/skill-management:skill-audit`.
+- Keep `in-progress` manual-only in `.claude-plugin/marketplace.json`, `.agents/plugins/marketplace.json`, install examples, and run examples; do not treat it as stable. Promote by moving the skill into a real category, updating that category manifest/README, and passing `/skill-management:skill-audit`.
 - Do not commit or push without explicit user instruction.
 
 ## 7. Definition of done

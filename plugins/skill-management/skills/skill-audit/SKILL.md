@@ -75,7 +75,7 @@ Classify each change as one or more CRUD operations, then apply the matching gat
 
 | Operation | Required checks | Completion criterion |
 |---|---|---|
-| **Create skill** | Prove it is not just an upstream duplicate; choose model/user invocation; define triggers, inputs, outputs, tools, dependencies, fallback, stop condition, and verification. If it is not ready for users, place it under `plugins/in-progress/skills/` and do not add marketplace/install entries; if published, add README and manifest entries and bump plugin version. | New folder has valid frontmatter, lifecycle state is explicit, validation passes, and local value is explicit. |
+| **Create skill** | Prove it is not just an upstream duplicate; choose model/user invocation; define triggers, inputs, outputs, tools, dependencies, fallback, stop condition, and verification. If it is not stable-ready, place it under `plugins/in-progress/skills/`, require `disable-model-invocation: true`, and expose it only through the explicit manual-only `in-progress` plugin; if published into a stable category, add README and manifest entries and bump plugin version. | New folder has valid frontmatter, lifecycle state is explicit, validation passes, and local value is explicit. |
 | **Read / audit skill** | Inspect `SKILL.md`, linked files, manifest/README entry, invocation class, dependency declarations, and security posture without modifying unless asked. | Output recommends keep, skip, install, adapter, patch umbrella, fork, or delete, with evidence. |
 | **Update skill** | Preserve one source of truth; patch the smallest local behavior delta; remove sediment/no-ops; keep references co-located or disclosed; update docs/indexes only when behavior or packaging changes; never hand-edit generated compatibility files. | Diff contains only intended behavior/package changes, validators pass, and old behavior is either preserved or deliberately replaced. |
 | **Delete skill** | Confirm it is unpromoted, duplicated, unsafe, stale, or absorbed; remove manifest/README/dependency references; name the replacement/dependency if any. | No references to the deleted skill remain, validation passes, and users have a clear migration path or deliberate removal note. |
@@ -83,7 +83,7 @@ Classify each change as one or more CRUD operations, then apply the matching gat
 
 ### Category CRUD
 
-A category is a marketplace plugin under `plugins/<category-name>/` with its own `.claude-plugin/plugin.json`, `.codex-plugin/plugin.json`, `skills/README.md`, and promoted skills. Use categories for durable domains such as `general`, `marketing`, or `skill-management`, not for one-off projects.
+A stable category is a marketplace plugin under `plugins/<category-name>/` with its own `.claude-plugin/plugin.json`, `.codex-plugin/plugin.json`, `skills/README.md`, and promoted skills. Use stable categories for durable domains such as `general`, `marketing`, or `skill-management`, not for one-off projects. `in-progress` is the manual-only draft lifecycle plugin and must not be treated as stable.
 
 | Operation | Required checks | Completion criterion |
 |---|---|---|
@@ -92,7 +92,7 @@ A category is a marketplace plugin under `plugins/<category-name>/` with its own
 | **Update category** | Patch the narrowest manifest/docs/skills delta; keep category boundaries stable; bump only the changed plugin version for shipped behavior changes. | Only intended category files change, and all category skill names resolve. |
 | **Delete category** | Confirm no promoted plugin install path still needs it; remove marketplace entry, category directory, top-level README commands, and dependency notes or migration path. | No dangling `plugins/<category>` or `/category:skill` references remain; validation passes. |
 | **Move skill between categories** | Keep `name` stable unless intentionally renamed; update old/new manifests and READMEs; update top-level examples; record migration path if user-invoked command changes. | Old category no longer lists the skill, new category does, and command/path references are updated. |
-| **Promote in-progress skill** | Move from `plugins/in-progress/skills/<name>/` into the durable published category; remove draft caveats or convert them to preflight/fallback/stop behavior; update destination manifests, bucket README, top-level README, dependency notes, and version; keep `in-progress` out of marketplace/install examples. | Draft path is gone, published category owns the skill, validators and plugin validation pass, and security gate has no blocking findings. |
+| **Promote in-progress skill** | Move from `plugins/in-progress/skills/<name>/` into the durable published category; remove draft caveats or convert them to preflight/fallback/stop behavior; update destination manifests, bucket README, top-level README, dependency notes, and version; remove or update `/in-progress:*` draft examples. | Draft path is gone, published category owns the skill, validators and plugin validation pass, and security gate has no blocking findings. |
 
 ### Dependency CRUD
 

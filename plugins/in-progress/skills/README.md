@@ -1,12 +1,22 @@
 # In-progress Skills
 
-Draft skills that are useful enough to evaluate but not ready for marketplace publication. This lifecycle category is intentionally not listed in `.claude-plugin/marketplace.json`, `.agents/plugins/marketplace.json`, install examples, or public run examples.
+Draft skills that are useful enough to evaluate but not ready for stable marketplace promotion. This lifecycle category is installable only as a manual-invocation plugin: every draft skill must set `disable-model-invocation: true`, and agents must not load these skills autonomously.
 
-## Draft skills
+## Manual install
+
+Claude Code:
+
+```text
+/plugin install in-progress@lvlokkie-skills-marketplace
+```
+
+Codex: install `in-progress` from the `lvlokkie-skills-marketplace` plugin browser (`/plugins`).
+
+## User-invoked draft skills
 
 | Skill | Status | Promotion target |
 |---|---|---|
-| [wizard](./wizard/SKILL.md) | Imported draft from `mattpocock/skills` for evaluation; user-invoked and not published. | Promote only after `/skill-management:skill-audit` confirms local value, secret-handling guardrails, packaging, and validation. |
+| [wizard](./wizard/SKILL.md) | Imported draft from `mattpocock/skills` for evaluation; manual-only and not stable. | Promote only after `/skill-management:skill-audit` confirms local value, secret-handling guardrails, packaging, and validation. |
 
 ## Draft gate
 

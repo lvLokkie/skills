@@ -25,7 +25,7 @@ If the change primarily creates/renames/removes a whole category plugin, use `sk
 
 1. **Classify the operation.** Choose create, update, move, promote, retire, or import/adapt. Name the owning category and the expected command path, for example `/skill-management:skill-authoring`.
 2. **Check local value.** Keep a local skill only when it adds Ivan/runtime routing, package indexes, dependency handling, verification, guardrails, or workflow behavior that an upstream dependency/reference does not already provide.
-3. **Choose lifecycle state.** Use `plugins/in-progress/skills/<name>/` for drafts that are not user-ready. Publish only by moving into a durable marketplace category under `plugins/<category>/skills/<name>/`.
+3. **Choose lifecycle state.** Use `plugins/in-progress/skills/<name>/` for drafts that are not stable-ready. Drafts are manual-only (`disable-model-invocation: true`) and installable only through the explicit `in-progress` plugin; publish by moving into a durable marketplace category under `plugins/<category>/skills/<name>/`.
 4. **Set invocation class.**
    - Model-invoked: no `disable-model-invocation`; the `description` starts with concrete trigger verbs and names distinct branches.
    - User-invoked: add `disable-model-invocation: true`; the `description` is a short human-facing command summary.
@@ -45,7 +45,7 @@ For moving a skill between categories or promoting it from `in-progress`:
 - [ ] Top-level README command examples and promoted table point to the new path.
 - [ ] Dependency docs and candidate notes use the new path.
 - [ ] Migration impact is noted if the user-invoked command path changed.
-- [ ] `plugins/in-progress` remains absent from marketplace install examples.
+- [ ] `plugins/in-progress` remains manual-only: no model-invoked drafts, no stable-category claims, and any `/in-progress:*` examples are explicitly labeled as draft/manual.
 
 ## Verification
 
