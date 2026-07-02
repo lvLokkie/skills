@@ -169,11 +169,13 @@ None yet. Prefer direct upstream dependencies for generic command skills like `h
 | `plugins/<category>/.codex-plugin/plugin.json` | Codex category plugin manifest and presentation metadata. |
 | `plugins/<category>/.claude-plugin/plugin.json` | Thin category plugin manifest; must list promoted skill folders. |
 | `plugins/<category>/skills/<name>/SKILL.md` | Source of truth for shipped skills. |
+| `plugins/in-progress/skills/<name>/SKILL.md` | Draft lifecycle area for skills that are not published or installed. |
 | `plugins/<category>/skills/README.md` | Category catalog grouped by invocation class. |
 | `docs/invocation.md` | Invocation taxonomy and dependency style. |
 | `docs/lifecycle.md` | Draft → published skill lifecycle, including the non-published `in-progress` category. |
 | `docs/dependencies.md` | General dependency policy: hard/soft/reference/tool/MCP/plugin deps, fallbacks, and no-vendoring rules. |
 | `docs/mattpocock-dependency-candidates.md` | Reference analysis and shortlist of upstream skills to depend on or adapt. |
+| `THIRD_PARTY_NOTICES.md` | Required upstream license notices for adapted third-party skill content. |
 | `AGENTS.md` | Working rules for agents editing this repo. |
 
 ## Manage skills and categories

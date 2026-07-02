@@ -15,6 +15,7 @@ Personal, vendor-neutral skills marketplace. Single source of truth for Ivan's p
 | `plugins/<category>/.claude-plugin/plugin.json` | Claude category plugin manifest and promoted skill list | ✅ thin |
 | `.mcp.json` or runtime MCP manifest, if added | MCP server distribution metadata only: endpoints/packages/placeholders, no secrets | ✅ thin |
 | `docs/` | Invocation model, dependency policy, dependency rationale, ADRs/reference notes | ✅ source |
+| `THIRD_PARTY_NOTICES.md` | Required upstream license notices for adapted third-party skill content | ✅ source |
 | `AGENTS.md` | Canonical agent instructions for this repo | ✅ source |
 | `CLAUDE.md`, `GEMINI.md`, `.cursor/*` | Generated compatibility files if present | ❌ never by hand |
 
