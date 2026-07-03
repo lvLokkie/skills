@@ -43,6 +43,8 @@ skill-management:skill-authoring
 skill-management:skill-category-management
 marketing:lidfly-mcp
 marketing:ad-campaign-operations
+marketing:yandex-wordstat-research
+marketing:avito-market-intelligence
 marketing:avito-ads-feed
 marketing:lead-routing-tracking
 # Optional manual-only draft skill:
@@ -93,6 +95,8 @@ Run promoted skills:
 /skill-management:skill-category-management
 /marketing:lidfly-mcp
 /marketing:ad-campaign-operations
+/marketing:yandex-wordstat-research
+/marketing:avito-market-intelligence
 /marketing:avito-ads-feed
 /marketing:lead-routing-tracking
 # Optional manual-only draft skill:
@@ -161,6 +165,8 @@ Draft skills that are not ready for stable users live in the lifecycle category 
 |---|---|
 | [lidfly-mcp](./plugins/marketing/skills/lidfly-mcp/SKILL.md) | Use LidFly MCP safely for advertising-platform access, setup checks, tool-scope selection, and read/write guardrails. |
 | [ad-campaign-operations](./plugins/marketing/skills/ad-campaign-operations/SKILL.md) | Operate and optimize advertising campaigns using source docs, campaign structure, metrics, experiments, and weekly action reports. |
+| [yandex-wordstat-research](./plugins/marketing/skills/yandex-wordstat-research/SKILL.md) | Estimate Yandex demand, build Wordstat/Direct keyword clusters, mine search queries, plan negatives and campaign structure. |
+| [avito-market-intelligence](./plugins/marketing/skills/avito-market-intelligence/SKILL.md) | Research Avito category/geo/pricing/competitors, inspect Avito Ads stats, and plan listing or promotion tests. |
 | [avito-ads-feed](./plugins/marketing/skills/avito-ads-feed/SKILL.md) | Generate, audit, and smoke-test Avito service ad feeds, branded cards, listing copy, category mappings, and feed coverage. |
 | [lead-routing-tracking](./plugins/marketing/skills/lead-routing-tracking/SKILL.md) | Audit and smoke-test lead forms, UTM/referrer attribution, n8n routing, Telegram/MAX delivery, and analytics goals. |
 

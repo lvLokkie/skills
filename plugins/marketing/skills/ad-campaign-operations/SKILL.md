@@ -7,10 +7,11 @@ description: "Advertising campaign operations: use when auditing, optimizing, re
 
 Operate paid acquisition campaigns as a controlled marketing workflow: source context first, live/tool data second, bounded changes last. This skill is grounded in the `territory-accounting-landing` campaign docs but should generalize to other Ivan marketing projects.
 
-Reference source imported from local project:
+Reference sources:
 
 ```text
 /Users/admin/repos/lvLokkie/territory-accounting-landing/docs/yandex-direct.md
+plugins/marketing/skills/ad-campaign-operations/references/github-candidate-synthesis.md
 ```
 
 The source documents Yandex Direct campaigns for accounting services, Metrika goals, weekly optimization, Avito ads/feed, and campaign constraints. Treat it as project context, not as proof of current live account state.
@@ -20,7 +21,8 @@ The source documents Yandex Direct campaigns for accounting services, Metrika go
 Use for:
 
 - Yandex Direct or Metrika campaign audit, optimization, weekly report, keyword and negative-keyword work;
-- Avito ads/feed review, service listing checks, creative/image checklist, or campaign readiness;
+- Yandex/Wordstat/Direct demand research that should route through `yandex-wordstat-research` before campaign edits;
+- Avito ads/feed review, service listing checks, creative/image checklist, campaign readiness, or market intelligence that should route through `avito-market-intelligence` before listing/promotion edits;
 - LidFly MCP-backed campaign analysis or live changes;
 - landing-page lead tracking, UTM attribution, goal/conversion checks;
 - marketing budget, CTR, CPA, conversion, or campaign structure decisions;
@@ -42,7 +44,7 @@ Do not use for generic copy editing, SEO content writing without paid-campaign m
 ## Operating loop
 
 1. **Read source context.** For territory-accounting, start with `docs/yandex-direct.md`, then inspect landing/deploy/lead docs if attribution or forms matter.
-2. **Build campaign map.** List campaigns, groups, geos, services, budgets, goals, feeds, and known exclusions.
+2. **Build campaign map.** List campaigns, groups, geos, services, budgets, goals, feeds, and known exclusions. For pre-launch market work, first build the Yandex/Avito demand map with `yandex-wordstat-research` and/or `avito-market-intelligence`.
 3. **Inspect metrics.** Prefer live MCP/API/Metrika data. If unavailable, label all metric-based recommendations as offline assumptions.
 4. **Find actions.** Classify each recommendation:
    - negative keyword;

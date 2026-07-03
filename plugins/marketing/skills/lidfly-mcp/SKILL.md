@@ -12,6 +12,9 @@ Public documentation observed during import:
 - Quickstart: `https://lidfly.ru/docs/quickstart`
 - Docs index: `https://lidfly.ru/docs/`
 - Recommended endpoint for new connections: `https://lidfly.ru/mcp/v3`
+- OAuth is the preferred setup path in current LidFly docs; static API-key/Bearer config is a fallback for clients that cannot complete OAuth.
+- Docs index describes `/mcp/v3` as a unified endpoint that first clarifies available cabinets and Workspaces, then calls tools with exact scope.
+- Tool catalogs observed in docs: Yandex Direct/Metrika, VK Ads, Avito Ads, LidFly site/landing/report tools, and Workspace memory; Avito Ads is documented as MCP v3 only.
 - Legacy endpoints mentioned by LidFly docs: `/mcp`, `/mcp/vk`, `/mcp/lidfly`, `/mcp/workspace`
 
 ## Safety contract
@@ -27,13 +30,14 @@ Public documentation observed during import:
 Before using LidFly MCP:
 
 1. Check whether a LidFly MCP server named `lidfly` is configured and at least one expected tool is discovered. Hermes-style tools should appear with the `mcp_lidfly_*` prefix.
-2. Prefer the category plugin's optional `plugins/marketing/.mcp.json` remote HTTP config when the runtime supports project/plugin MCP manifests. It uses `https://lidfly.ru/mcp/v3` with `Authorization: Bearer ${LIDFLY_API_KEY}`; the real value must live in the runtime env/secret store.
-3. If unavailable, give the setup path without asking for secrets in chat:
+2. Prefer runtime/client OAuth when supported: configure `https://lidfly.ru/mcp/v3`, complete the browser/email OAuth flow, restart the client/session, and verify the tools are visible.
+3. For clients that only support static headers, use the category plugin's optional `plugins/marketing/.mcp.json` remote HTTP config. It uses `https://lidfly.ru/mcp/v3` with `Authorization: Bearer ${LIDFLY_API_KEY}`; the real value must live in the runtime env/secret store.
+4. If unavailable, give the setup path without asking for secrets in chat:
    - create/login to LidFly account;
-   - copy API key from the LidFly account UI;
+   - connect the required advertising cabinets in LidFly UI;
    - configure MCP endpoint `https://lidfly.ru/mcp/v3` in the target client or install the plugin MCP manifest;
-   - store the API key in the client/runtime secret store, not in this repo.
-4. If platform calls fail with auth errors, ask Ivan to verify the LidFly account connection/OAuth in LidFly UI; do not request the token value.
+   - complete OAuth when possible, or store `LIDFLY_API_KEY` in the client/runtime secret store for static-token clients only.
+5. If platform calls fail with auth errors, ask Ivan to verify the LidFly account connection/OAuth in LidFly UI; do not request the token value.
 
 ## Operating loop
 
