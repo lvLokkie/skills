@@ -41,6 +41,18 @@
       "category": "Marketing"
     },
     {
+      "name": "business-docs",
+      "source": {
+        "source": "local",
+        "path": "./plugins/business-docs"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
       "name": "in-progress",
       "source": {
         "source": "local",

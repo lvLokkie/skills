@@ -31,13 +31,17 @@ codex
 /plugins
 ```
 
-In the plugin browser, switch to `lvlokkie-skills-marketplace`, then install `general`, `skill-management`, and `marketing`; optionally install `in-progress` for manual-only draft skills.
+In the plugin browser, switch to `lvlokkie-skills-marketplace`, then install `general`, `skill-management`, `marketing`, and `business-docs`; optionally install `in-progress` for manual-only draft skills.
 
 **Activate.** Start a new Codex session after installing or upgrading the plugins. The available skill names are:
 
 ```text
 general:report-writing
 general:make-me-rich
+business-docs:business-doc-suite
+business-docs:core-business-brief
+business-docs:business-plan-writing
+business-docs:financial-model-spec
 skill-management:skill-audit
 skill-management:skill-authoring
 skill-management:skill-category-management
@@ -68,6 +72,7 @@ claude plugin marketplace add https://github.com/lvLokkie/skills.git
 claude plugin install general@lvlokkie-skills-marketplace
 claude plugin install skill-management@lvlokkie-skills-marketplace
 claude plugin install marketing@lvlokkie-skills-marketplace
+claude plugin install business-docs@lvlokkie-skills-marketplace
 # Optional manual-only draft skills:
 claude plugin install in-progress@lvlokkie-skills-marketplace
 ```
@@ -79,6 +84,7 @@ Equivalent commands inside Claude Code:
 /plugin install general@lvlokkie-skills-marketplace
 /plugin install skill-management@lvlokkie-skills-marketplace
 /plugin install marketing@lvlokkie-skills-marketplace
+/plugin install business-docs@lvlokkie-skills-marketplace
 # Optional manual-only draft skills:
 /plugin install in-progress@lvlokkie-skills-marketplace
 ```
@@ -99,6 +105,10 @@ Run promoted skills:
 /marketing:avito-market-intelligence
 /marketing:avito-ads-feed
 /marketing:lead-routing-tracking
+/business-docs:business-doc-suite
+/business-docs:core-business-brief
+/business-docs:business-plan-writing
+/business-docs:financial-model-spec
 # Optional manual-only draft skill:
 /in-progress:wizard
 ```
@@ -110,6 +120,7 @@ claude plugin marketplace update lvlokkie-skills-marketplace
 claude plugin update general@lvlokkie-skills-marketplace
 claude plugin update skill-management@lvlokkie-skills-marketplace
 claude plugin update marketing@lvlokkie-skills-marketplace
+claude plugin update business-docs@lvlokkie-skills-marketplace
 ```
 
 Updates rely on valid GitHub credentials; if they expire, re-authenticate.
@@ -146,6 +157,17 @@ Draft skills that are not ready for stable users live in the lifecycle category 
 | Skill | Purpose |
 |---|---|
 | [make-me-rich](./plugins/general/skills/make-me-rich/SKILL.md) | Plan a task on the expensive model while cheaper sub-agents do bounded read-only analysis, then write an executable plan for cheaper executors. |
+
+### `business-docs`
+
+#### Model-invoked
+
+| Skill | Purpose |
+|---|---|
+| [business-doc-suite](./plugins/business-docs/skills/business-doc-suite/SKILL.md) | Choose, sequence, and assemble the right business-document package for a venture, pivot, investment, grant, partner, or internal planning request. |
+| [core-business-brief](./plugins/business-docs/skills/core-business-brief/SKILL.md) | Create the core business document: essence, customer, value, market, product, revenue model, GTM, operations, financial frame, risks, assumptions, and first 3-6 months. |
+| [business-plan-writing](./plugins/business-docs/skills/business-plan-writing/SKILL.md) | Write, rewrite, or audit audience-specific business plans and investment/partner/bank/grant memos from source materials and assumptions. |
+| [financial-model-spec](./plugins/business-docs/skills/financial-model-spec/SKILL.md) | Produce a spreadsheet-ready financial model specification with assumptions, formulas, scenarios, validation tasks, and arithmetic checks. |
 
 ### `skill-management`
 

@@ -1,0 +1,35 @@
+{
+  "name": "business-docs",
+  "version": "0.2.0",
+  "description": "Business document formation skills for core business briefs, business plans, financial model specifications, and coherent venture document suites.",
+  "author": {
+    "name": "Ivan Ryazanov"
+  },
+  "repository": "https://github.com/lvLokkie/skills",
+  "keywords": [
+    "agent-skills",
+    "lvlokkie",
+    "business-docs",
+    "business-plan",
+    "financial-model"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Ivan Business Docs Skills",
+    "shortDescription": "Business document formation workflows",
+    "longDescription": "Portable workflows for core business briefs, business plans, financial model specifications, and coherent venture document suites with assumptions, sources, and consistency checks.",
+    "developerName": "Ivan Ryazanov",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive"
+    ],
+    "defaultPrompt": [
+      "Create a core business brief",
+      "Write a business plan",
+      "Prepare financial model assumptions",
+      "Assemble a business document suite"
+    ],
+    "brandColor": "#1D4ED8",
+    "screenshots": []
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "business-docs",
+  "description": "Business document formation skills for core business briefs, business plans, financial model specifications, and coherent venture document suites.",
+  "version": "0.2.0",
+  "author": {
+    "name": "Ivan Ryazanov"
+  },
+  "skills": [
+    "./skills/business-doc-suite",
+    "./skills/core-business-brief",
+    "./skills/business-plan-writing",
+    "./skills/financial-model-spec"
+  ]
+}
