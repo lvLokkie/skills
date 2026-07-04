@@ -1,7 +1,7 @@
 {
   "name": "marketing",
-  "version": "0.5.0",
-  "description": "Marketing and paid-acquisition operations skills for campaign setup, audit, reporting, lead routing, Avito feed checks, and MCP-assisted optimization.",
+  "version": "0.6.0",
+  "description": "Marketing and paid-acquisition operations skills for campaign tooling readiness, setup, audit, reporting, lead routing, Avito feed checks, and MCP-assisted optimization.",
   "author": {
     "name": "Ivan Ryazanov"
   },
@@ -15,13 +15,14 @@
   "interface": {
     "displayName": "Ivan Marketing Skills",
     "shortDescription": "Marketing and paid-acquisition operations",
-    "longDescription": "Portable marketing workflows for LidFly MCP-assisted campaign operations, Yandex/Wordstat research, Avito market intelligence, feed checks, lead routing, and paid-acquisition reporting.",
+    "longDescription": "Portable marketing workflows for LidFly MCP-assisted campaign tooling readiness, campaign operations, Yandex/Wordstat research, Avito market intelligence, feed checks, lead routing, and paid-acquisition reporting.",
     "developerName": "Ivan Ryazanov",
     "category": "Marketing",
     "capabilities": [
       "Interactive"
     ],
     "defaultPrompt": [
+      "Check campaign tooling readiness",
       "Audit an ad campaign",
       "Research Yandex and Avito demand",
       "Check a lead-routing flow",

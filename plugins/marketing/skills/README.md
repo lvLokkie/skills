@@ -4,13 +4,14 @@ Promoted skills shipped by the `marketing` plugin. Keep this list in sync with `
 
 ## Category contract
 
-Use this category for paid-acquisition and funnel operations where source docs, live marketing tools, MCP/API reads, and production safety boundaries matter. Keep project-specific IDs, offers, phone numbers, webhook suffixes, and account details in the project repo or runtime tool output — not in marketplace skill bodies.
+Use this category for paid-acquisition tooling readiness, campaign operations, and funnel operations where source docs, live marketing tools, MCP/API reads, and production safety boundaries matter. Keep project-specific IDs, offers, phone numbers, webhook suffixes, and account details in the project repo or runtime tool output — not in marketplace skill bodies.
 
 ## Skill routing
 
 | Task | Use | Default mode |
 |---|---|---|
 | Connect/check/use LidFly MCP, advertising account inventory, live campaign reads/writes | [lidfly-mcp](./lidfly-mcp/SKILL.md) | Read-only MCP discovery first; bounded writes only after approval and read-back. |
+| Prepare tooling before campaign setup: CRUD coverage, analytics quality, discovery backlog, budget controls | [campaign-tooling-readiness](./campaign-tooling-readiness/SKILL.md) | Readiness only; no live campaign mutations, produce unblockers and write envelopes. |
 | Audit/optimize/report paid campaigns across Yandex Direct/Metrika, VK Ads, Avito, LidFly | [ad-campaign-operations](./ad-campaign-operations/SKILL.md) | Source docs first, live/tool metrics second, bounded actions last. |
 | Estimate Yandex demand, build Wordstat/Direct keyword clusters, mine queries, plan negatives/structure | [yandex-wordstat-research](./yandex-wordstat-research/SKILL.md) | Research/read-only data first; keyword/bid/campaign writes only after approval. |
 | Research Avito category/geo/pricing/competitors, pull Avito Ads stats, plan listing/promotion tests | [avito-market-intelligence](./avito-market-intelligence/SKILL.md) | Official/API/export/public-sample evidence; publish/promotion writes only after approval. |
@@ -32,6 +33,7 @@ Default auth order: OAuth/credential store if the runtime and server support it;
 ## Model-invoked
 
 - **[lidfly-mcp](./lidfly-mcp/SKILL.md)** — Use LidFly MCP safely for advertising-platform access, setup checks, tool-scope selection, and read/write guardrails.
+- **[campaign-tooling-readiness](./campaign-tooling-readiness/SKILL.md)** — Prove Avito/Yandex/LidFly tool readiness before setup: CRUD, analytics quality, discovery inputs, budgets, and lead-quality loops.
 - **[ad-campaign-operations](./ad-campaign-operations/SKILL.md)** — Operate and optimize advertising campaigns using source docs, campaign structure, metrics, experiments, and weekly action reports.
 - **[yandex-wordstat-research](./yandex-wordstat-research/SKILL.md)** — Estimate Yandex demand, build Wordstat/Direct keyword clusters, mine search queries, plan negatives and campaign structure.
 - **[avito-market-intelligence](./avito-market-intelligence/SKILL.md)** — Research Avito category/geo/pricing/competitors, inspect Avito Ads stats, and plan listing or promotion tests.

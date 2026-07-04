@@ -1,12 +1,13 @@
 {
   "name": "marketing",
-  "description": "Marketing and paid-acquisition operations skills for campaign setup, audit, reporting, lead routing, Avito feed checks, and MCP-assisted optimization.",
-  "version": "0.5.0",
+  "description": "Marketing and paid-acquisition operations skills for campaign tooling readiness, setup, audit, reporting, lead routing, Avito feed checks, and MCP-assisted optimization.",
+  "version": "0.6.0",
   "author": {
     "name": "Ivan Ryazanov"
   },
   "skills": [
     "./skills/lidfly-mcp",
+    "./skills/campaign-tooling-readiness",
     "./skills/ad-campaign-operations",
     "./skills/yandex-wordstat-research",
     "./skills/avito-market-intelligence",

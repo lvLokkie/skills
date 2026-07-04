@@ -12,6 +12,7 @@ Reference sources:
 ```text
 /Users/admin/repos/lvLokkie/territory-accounting-landing/docs/yandex-direct.md
 plugins/marketing/skills/ad-campaign-operations/references/github-candidate-synthesis.md
+plugins/marketing/skills/campaign-tooling-readiness/references/gitlab-lidfly-ad-tools-synthesis.md
 ```
 
 The source documents Yandex Direct campaigns for accounting services, Metrika goals, weekly optimization, Avito ads/feed, and campaign constraints. Treat it as project context, not as proof of current live account state.
@@ -24,6 +25,7 @@ Use for:
 - Yandex/Wordstat/Direct demand research that should route through `yandex-wordstat-research` before campaign edits;
 - Avito ads/feed review, service listing checks, creative/image checklist, campaign readiness, or market intelligence that should route through `avito-market-intelligence` before listing/promotion edits;
 - LidFly MCP-backed campaign analysis or live changes;
+- campaign setup readiness where `campaign-tooling-readiness` should first prove CRUD coverage, analytics quality, discovery backlog, and budget controls;
 - landing-page lead tracking, UTM attribution, goal/conversion checks;
 - marketing budget, CTR, CPA, conversion, or campaign structure decisions;
 - turning local campaign docs into an action plan.
@@ -39,7 +41,8 @@ Do not use for generic copy editing, SEO content writing without paid-campaign m
    - **read-only live** — inspect current campaign/tool data;
    - **write-planned** — propose concrete changes for approval;
    - **write-applied** — apply a bounded approved change and read it back.
-4. If live access goes through LidFly, use `lidfly-mcp` safety rules.
+4. If the next step is campaign setup or new platform tooling, run `campaign-tooling-readiness` before creating campaigns or changing budgets.
+5. If live access goes through LidFly, use `lidfly-mcp` safety rules.
 
 ## Operating loop
 

@@ -46,6 +46,7 @@ skill-management:skill-audit
 skill-management:skill-authoring
 skill-management:skill-category-management
 marketing:lidfly-mcp
+marketing:campaign-tooling-readiness
 marketing:ad-campaign-operations
 marketing:yandex-wordstat-research
 marketing:avito-market-intelligence
@@ -100,6 +101,7 @@ Run promoted skills:
 /skill-management:skill-authoring
 /skill-management:skill-category-management
 /marketing:lidfly-mcp
+/marketing:campaign-tooling-readiness
 /marketing:ad-campaign-operations
 /marketing:yandex-wordstat-research
 /marketing:avito-market-intelligence
@@ -186,6 +188,7 @@ Draft skills that are not ready for stable users live in the lifecycle category 
 | Skill | Purpose |
 |---|---|
 | [lidfly-mcp](./plugins/marketing/skills/lidfly-mcp/SKILL.md) | Use LidFly MCP safely for advertising-platform access, setup checks, tool-scope selection, and read/write guardrails. |
+| [campaign-tooling-readiness](./plugins/marketing/skills/campaign-tooling-readiness/SKILL.md) | Prove Avito/Yandex/LidFly tooling readiness before setup: CRUD coverage, analytics quality, discovery backlog, budget controls, and lead-quality loops. |
 | [ad-campaign-operations](./plugins/marketing/skills/ad-campaign-operations/SKILL.md) | Operate and optimize advertising campaigns using source docs, campaign structure, metrics, experiments, and weekly action reports. |
 | [yandex-wordstat-research](./plugins/marketing/skills/yandex-wordstat-research/SKILL.md) | Estimate Yandex demand, build Wordstat/Direct keyword clusters, mine search queries, plan negatives and campaign structure. |
 | [avito-market-intelligence](./plugins/marketing/skills/avito-market-intelligence/SKILL.md) | Research Avito category/geo/pricing/competitors, inspect Avito Ads stats, and plan listing or promotion tests. |
