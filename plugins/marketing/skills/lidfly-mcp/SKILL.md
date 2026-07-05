@@ -1,5 +1,5 @@
 ---
-name: lidfly-mcp
+name: lv:lidfly-mcp
 description: "LidFly MCP marketing access: use when setting up, checking, or operating LidFly MCP for advertising platforms, Yandex Direct/Metrika, VK Ads, Avito Ads, LidFly landing/report tools, Workspace memory, or marketing campaign analysis. Enforces credential redaction, read-before-write, account/scope confirmation, and safe MCP fallback behavior."
 ---
 

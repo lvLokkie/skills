@@ -1,5 +1,5 @@
 ---
-name: ad-campaign-operations
+name: lv:ad-campaign-operations
 description: "Advertising campaign operations: use when auditing, optimizing, reporting, or planning paid acquisition campaigns, especially Yandex Direct/Metrika, Avito ads, VK Ads, LidFly-managed campaigns, UTM attribution, landing-page conversion tracking, keyword/negative-keyword work, creative tests, or weekly campaign action reports."
 ---
 

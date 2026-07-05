@@ -1,5 +1,5 @@
 ---
-name: avito-market-intelligence
+name: lv:avito-market-intelligence
 description: "Avito market intelligence and ads analytics: use when researching Avito demand, competitor listings, category/geo/pricing, promotion mechanics, Avito Ads/LidFly MCP stats, campaign groups/creatives, or market research for alpha-service/service projects."
 ---
 

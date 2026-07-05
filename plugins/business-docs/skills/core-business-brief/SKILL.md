@@ -1,5 +1,5 @@
 ---
-name: core-business-brief
+name: lv:core-business-brief
 description: "Create or revise the core business document for a new venture: business concept note, venture brief, startup foundation memo, business blueprint, or founding business brief. Use when the user wants to define what sells, to whom, why they buy, how value is delivered, how money is made, what assumptions/risks exist, and what should feed the financial model and first 3-6 month plan."
 ---
 

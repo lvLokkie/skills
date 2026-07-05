@@ -43,7 +43,7 @@ Keep README, bucket README, and per-agent plugin manifests in sync. See `docs/in
 
 - One skill = one folder under `plugins/<category>/skills/<kebab-name>/`.
 - Use `plugins/in-progress/skills/<kebab-name>/` for draft skills that should not be deployed as stable workflows yet; `in-progress` is a manual-only lifecycle plugin and every draft skill must set `disable-model-invocation: true`.
-- Frontmatter must include `name` and `description`.
+- Frontmatter must include `name` and `description`; `name` must be `lv:<skill-folder>` for every marketplace skill, while plugin command paths and folders stay `<category>:<skill-folder>` / `plugins/<category>/skills/<skill-folder>/`.
 - Keep `SKILL.md` focused on the execution path; put heavy references in sibling files.
 - Every step needs a checkable completion criterion.
 - Delete no-op prose. If a sentence does not change behavior, output, verification, or refusal boundary, remove it.

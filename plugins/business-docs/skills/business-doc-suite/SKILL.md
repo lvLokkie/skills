@@ -1,5 +1,5 @@
 ---
-name: business-doc-suite
+name: lv:business-doc-suite
 description: "Choose, sequence, and assemble the right business documents for a new venture, pivot, investment, grant, partner, or internal planning request. Use when the user asks for a business-document package, business blueprint/docs, startup docs, venture docs, business-plan set, or asks which business document to create first."
 ---
 

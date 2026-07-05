@@ -1,5 +1,5 @@
 ---
-name: yandex-wordstat-research
+name: lv:yandex-wordstat-research
 description: "Yandex/Wordstat market and keyword research: use when estimating demand, building keyword clusters, mining search queries, planning Yandex Direct structure, negative keywords, geos, competitor hypotheses, or market research for alpha-service/service projects before or during paid acquisition."
 ---
 

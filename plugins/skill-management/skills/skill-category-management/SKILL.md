@@ -1,5 +1,5 @@
 ---
-name: skill-category-management
+name: lv:skill-category-management
 description: "Create, update, rename, split, merge, or remove marketplace category plugins. Use when adding a new plugins/<category> package, changing category boundaries, moving skills between categories, updating marketplace.json, or moving category-management instructions out of README prose into packaged skills."
 ---
 

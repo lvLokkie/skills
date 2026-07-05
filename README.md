@@ -33,7 +33,7 @@ codex
 
 In the plugin browser, switch to `lvlokkie-skills-marketplace`, then install `general`, `skill-management`, `marketing`, and `business-docs`; optionally install `in-progress` for manual-only draft skills.
 
-**Activate.** Start a new Codex session after installing or upgrading the plugins. The available skill names are:
+**Activate.** Start a new Codex session after installing or upgrading the plugins. Marketplace skill frontmatter names are namespaced as `lv:<skill-folder>`; plugin command paths still use the folder slug:
 
 ```text
 general:report-writing

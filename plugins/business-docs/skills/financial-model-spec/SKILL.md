@@ -1,5 +1,5 @@
 ---
-name: financial-model-spec
+name: lv:financial-model-spec
 description: "Prepare a financial-model specification and assumptions ledger for a new business, business plan, investor memo, bank proposal, or operating plan. Use when the user needs revenue logic, unit economics, startup costs, burn, break-even, scenarios, or spreadsheet inputs before or alongside a business document."
 ---
 

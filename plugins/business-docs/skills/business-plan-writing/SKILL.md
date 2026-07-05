@@ -1,5 +1,5 @@
 ---
-name: business-plan-writing
+name: lv:business-plan-writing
 description: "Write, rewrite, or audit a business plan, investor plan, bank/partner proposal, grant/startup-program plan, or investment memorandum from a core business brief, notes, deck, research, or financial assumptions. Use when the user wants a polished decision document, not just the underlying business logic."
 ---
 

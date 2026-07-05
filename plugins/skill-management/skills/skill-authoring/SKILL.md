@@ -1,5 +1,5 @@
 ---
-name: skill-authoring
+name: lv:skill-authoring
 description: "Create, revise, promote, move, or retire skills in this marketplace. Use when adding a SKILL.md, changing a skill's invocation class, moving drafts from in-progress, updating skill references/dependencies, or replacing README-only skill-management instructions with real packaged skills."
 ---
 
@@ -29,17 +29,18 @@ If the change primarily creates/renames/removes a whole category plugin, use `sk
 4. **Set invocation class.**
    - Model-invoked: no `disable-model-invocation`; the `description` starts with concrete trigger verbs and names distinct branches.
    - User-invoked: add `disable-model-invocation: true`; the `description` is a short human-facing command summary.
-5. **Write the behavior in `SKILL.md`.** Include trigger conditions, inputs, ordered actions, dependency/preflight checks, stop/fallback conditions, output contract, and verification. Move bulky examples or references into sibling files with explicit links.
-6. **Preserve multimodel portability.** Keep shared behavior agent-neutral. Put target-specific invocation syntax, install steps, manifest fields, and runtime caveats in target-specific docs/manifests, or document the prerequisite, fallback, and stop condition.
-7. **Update package indexes.** Keep the destination `skills/README.md`, destination Claude/Codex plugin manifests, top-level README run examples/promoted table, and dependency docs aligned. When moving a skill, remove stale entries from the old category too.
-8. **Bump versions.** Bump only the owning category plugin manifest versions when shipped behavior or command paths change. If moving between categories changes both old and new plugin surfaces, bump both affected plugin manifests.
-9. **Run the publish gate.** Run `/skill-management:skill-audit` for the exact CRUD operation, then validation commands.
+5. **Apply naming rules.** The on-disk folder remains the bare kebab-case skill slug, but every marketplace `SKILL.md` frontmatter `name` must be `lv:<skill-folder>` with exactly one `lv:` prefix. Do not change plugin command paths to include the prefix; commands stay `/<category>:<skill-folder>`.
+6. **Write the behavior in `SKILL.md`.** Include trigger conditions, inputs, ordered actions, dependency/preflight checks, stop/fallback conditions, output contract, and verification. Move bulky examples or references into sibling files with explicit links.
+7. **Preserve multimodel portability.** Keep shared behavior agent-neutral. Put target-specific invocation syntax, install steps, manifest fields, and runtime caveats in target-specific docs/manifests, or document the prerequisite, fallback, and stop condition.
+8. **Update package indexes.** Keep the destination `skills/README.md`, destination Claude/Codex plugin manifests, top-level README run examples/promoted table, and dependency docs aligned. When moving a skill, remove stale entries from the old category too.
+9. **Bump versions.** Bump only the owning category plugin manifest versions when shipped behavior or command paths change. If moving between categories changes both old and new plugin surfaces, bump both affected plugin manifests.
+10. **Run the publish gate.** Run `/skill-management:skill-audit` for the exact CRUD operation, then validation commands.
 
 ## Move / promotion checklist
 
 For moving a skill between categories or promoting it from `in-progress`:
 
-- [ ] `name` stays stable unless the skill is intentionally renamed.
+- [ ] `name` stays `lv:<skill-folder>` unless the skill is intentionally renamed; do not double-prefix, and keep command paths/folders bare.
 - [ ] Old category manifests and README no longer list it.
 - [ ] New category manifests and README list it.
 - [ ] Top-level README command examples and promoted table point to the new path.

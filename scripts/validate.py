@@ -63,6 +63,20 @@ def bucket_skill_link(skill_name: str) -> str:
     return f"[{skill_name}](./{skill_name}/SKILL.md)"
 
 
+def expected_frontmatter_name(skill_dir: Path) -> str:
+    return f"lv:{skill_dir.name}"
+
+
+def validate_skill_frontmatter_name(skill_file: Path, fm: dict[str, str]) -> str:
+    expected = expected_frontmatter_name(skill_file.parent)
+    skill_name = fm.get("name") or ""
+    if skill_name != expected:
+        fail(f"{skill_file.relative_to(ROOT)}: frontmatter name must be {expected!r}")
+    if skill_name.startswith("lv:lv:"):
+        fail(f"{skill_file.relative_to(ROOT)}: frontmatter name must not be double-prefixed")
+    return skill_file.parent.name
+
+
 def validate_optional_mcp(plugin_root: Path) -> None:
     mcp_path = plugin_root / ".mcp.json"
     if not mcp_path.exists():
@@ -154,9 +168,7 @@ def validate_claude_plugin(plugin_entry: object, top_readme: str, marketplace_na
         if not skill_file.exists():
             fail(f"manifest skill missing SKILL.md: {rel}")
         fm = parse_frontmatter(skill_file)
-        skill_name = fm.get("name") or skill_dir.name
-        if skill_name != skill_dir.name:
-            fail(f"{skill_file.relative_to(ROOT)}: frontmatter name must match directory")
+        skill_name = validate_skill_frontmatter_name(skill_file, fm)
         if not fm.get("description"):
             fail(f"{skill_file.relative_to(ROOT)}: description is required")
         if skill_name in seen:
@@ -294,9 +306,7 @@ def validate_in_progress(top_readme: str, marketplace_names: set[str]) -> int:
     draft_files = sorted(skills_dir.glob("*/SKILL.md"))
     for skill_file in draft_files:
         fm = parse_frontmatter(skill_file)
-        skill_name = fm.get("name") or skill_file.parent.name
-        if skill_name != skill_file.parent.name:
-            fail(f"{skill_file.relative_to(ROOT)}: frontmatter name must match directory")
+        skill_name = validate_skill_frontmatter_name(skill_file, fm)
         if not fm.get("description"):
             fail(f"{skill_file.relative_to(ROOT)}: description is required")
         if fm.get("disable-model-invocation") != "true":

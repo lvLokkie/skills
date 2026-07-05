@@ -1,5 +1,5 @@
 ---
-name: campaign-tooling-readiness
+name: lv:campaign-tooling-readiness
 description: "Marketing campaign tooling readiness: use before setting up or changing Avito Ads, Yandex Direct/Metrika, VK Ads, or LidFly-managed campaigns when the work is to inventory tools, prove CRUD/read/write coverage, analytics quality, discovery inputs, budget controls, and lead-quality feedback loops before live campaign setup."
 ---
 

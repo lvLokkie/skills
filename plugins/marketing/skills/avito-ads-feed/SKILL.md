@@ -1,5 +1,5 @@
 ---
-name: avito-ads-feed
+name: lv:avito-ads-feed
 description: "Avito ads feed operations: use when generating, auditing, or smoke-testing Avito service ads, XML feeds, listing copy, branded card images, category/service mappings, city expansion, feed build checks, or paid/listing performance follow-up for Ivan's marketing projects."
 ---
 

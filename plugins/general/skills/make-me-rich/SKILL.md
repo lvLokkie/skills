@@ -1,5 +1,5 @@
 ---
-name: make-me-rich
+name: lv:make-me-rich
 description: Plan a task on the expensive model while a bounded swarm of cheaper sub-agents does read-only analysis; outputs an executable plan for cheaper executors.
 disable-model-invocation: true
 argument-hint: "The task to plan"

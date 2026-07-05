@@ -1,5 +1,5 @@
 ---
-name: report-writing
+name: lv:report-writing
 description: "Report writing: turn evidence, tool output, or research into a decision-ready report. Use when the user asks for a report/отчёт, brief, decision memo, status update, incident/debug report, audit/review, market or competitor analysis writeup, or a durable markdown deliverable with sources and next actions."
 ---
 
